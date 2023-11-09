@@ -13,9 +13,8 @@ class Supplier extends Model
     protected $fillable = [
         'name',
         'address',
-        'contact_number',
+        'phone',
         'email',
-        'website'
     ];
 
     public function products(): BelongsToMany
@@ -34,4 +33,5 @@ class Supplier extends Model
     {
         return $query->where('name', 'like', '%' . $search . '%');
     }
+
 }

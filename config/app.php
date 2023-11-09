@@ -170,6 +170,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
+        \Justin0122\Crud\CrudServiceProvider::class,
     ])->toArray(),
 
     /*

@@ -1,30 +1,26 @@
-<div class="container mx-auto mt-8">
-    <div class="bg-white p-8 rounded shadow-md">
-        <h1 class="text-3xl font-bold mb-4">{{ $product->name }}</h1>
+<div class="max-w-md mt-8 p-6 bg-white rounded-md shadow-md dark:bg-gray-800 dark:text-gray-200">
+    <h1 class="text-2xl font-bold mb-4">{{ $productSpecifications->first()->product->name }}</h1>
 
-        @foreach($product->sizes as $size)
-            @foreach($product->colors as $color)
-                @foreach($product->suppliers as $supplier)
-                    @php
-                        $specification = $product->productSpecifications
-                            ->where('size_id', $size->id)
-                            ->where('color_id', $color->id)
-                            ->where('supplier_id', $supplier->id)
-                            ->first();
-                    @endphp
-
-                    <div class="mb-4 border-b border-gray-300 pb-4">
-                        <p class="text-lg font-semibold mb-2">
-                            Combination: Size - {{ $size->name }},
-                            Color - {{ $color->name }},
-                            Supplier - {{ $supplier->name }}
-                        </p>
-                        <p class="text-gray-600">
-                            Stock: {{ $specification ? $specification->stock : 0 }}
-                        </p>
-                    </div>
-                @endforeach
-            @endforeach
-        @endforeach
-    </div>
+    @foreach($productSpecifications as $specification)
+        <div class="mb-4 border-b pb-4">
+            <p class="text-lg font-semibold">
+                @if (isset($specification->supplier))
+                    <span class="text-purple-500">{{ $specification->supplier->name }}</span>
+                @endif
+                @if (isset($specification->size))
+                    - <span class="text-blue-500">{{ $specification->size->key }}</span>
+                @else
+                    - <span class="text-blue-500">N/A</span>
+                @endif
+                @if (isset($specification->color))
+                    - <span class="text-green-500">{{ $specification->color->key }}</span>
+                @else
+                    - <span class="text-blue-500">N/A</span>
+                @endif
+            </p>
+            <p class="text- {{ $specification->stock > 5 ? 'text-green-500' : 'text-red-500'}}">
+                Stock: <span class="font-bold">{{ $specification->stock }}</span>
+            </p>
+        </div>
+    @endforeach
 </div>
