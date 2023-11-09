@@ -22,6 +22,6 @@ class Category extends Model
 
     public function specifications(): HasManyThrough
     {
-        return $this->hasManyThrough(Specification::class, Product::class);
+        return $this->hasManyThrough(Color::class, Product::class);
     }
 }

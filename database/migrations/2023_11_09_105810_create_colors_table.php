@@ -9,15 +9,15 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('suppliers', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->string('address')->nullable()->default(null);
-            $table->string('phone');
+        Schema::create('colors', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('key');
             $table->timestamps();
+
+            $table->softDeletes();
+
         });
     }
 
@@ -26,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suppliers');
+        Schema::dropIfExists('specifications');
     }
 };

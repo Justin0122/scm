@@ -18,6 +18,8 @@ return new class extends Migration
             $table->bigInteger('category_id')->unsigned()->nullable();
             $table->timestamps();
 
+            $table->softDeletes();
+
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         });
     }

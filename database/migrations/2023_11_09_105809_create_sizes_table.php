@@ -9,15 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('specifications', function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create('sizes', function (Blueprint $table) {
+            $table->id();
             $table->string('key');
-            $table->unsignedBigInteger('data_type_id');
             $table->timestamps();
-
-            $table->foreign('data_type_id')->references('id')->on('data_types');
         });
     }
 
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('specifications');
+        Schema::dropIfExists('sizes');
     }
 };

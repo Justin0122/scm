@@ -26,7 +26,7 @@ class Supplier extends Model
 
     public function specifications(): BelongsToMany
     {
-        return $this->belongsToMany(Specification::class, 'supplier_specification')
+        return $this->belongsToMany(Color::class, 'supplier_specification')
             ->withPivot('value');
     }
 
