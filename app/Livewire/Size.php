@@ -54,6 +54,6 @@ class Size extends Component
         $Size = SizeModel::find($id);
         $Size->delete();
 
-        return redirect()->route(strtolower('Size'));
+        return redirect()->back();
     }
 }
