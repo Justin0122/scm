@@ -19,10 +19,13 @@ class Products extends Component
     public $category;
     public $sortBy = 'name';
     public $sortDirection = 'asc';
+    public $color;
+    public $size;
+    public $supplierId;
 
     public function render()
     {
-        $query = Product::with(['category', 'specifications', 'suppliers'])
+        $query = Product::withTrashed()
             ->where(function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('description', 'like', '%' . $this->search . '%');
@@ -34,10 +37,26 @@ class Products extends Component
             });
         }
 
-        // Apply sorting
+        if ($this->color) {
+            $query->whereHas('colors', function ($query) {
+                $query->where('colors.id', $this->color);
+            });
+        }
+
+        if ($this->size) {
+            $query->whereHas('sizes', function ($query) {
+                $query->where('sizes.id', $this->size);
+            });
+        }
+
+        if ($this->supplierId) {
+            $query->whereHas('suppliers', function ($query) {
+                $query->where('suppliers.id', $this->supplierId);
+            });
+        }
+
         $query->orderBy($this->sortBy, $this->sortDirection);
 
-        // Get the results
         $products = $query->paginate(10);
 
         if (!$products->count()) {
@@ -45,24 +64,43 @@ class Products extends Component
             $products = $query->paginate(10);
         }
 
+        $stock = $this->calculateStock($products, $this->color, $this->size, $this->supplierId);
+
         return view('livewire.products', [
             'products' => $products,
             'categories' => Category::all(),
+            'stock' => $stock,
         ]);
-    }
 
-    public function getStock($productId, $supplierId, $productSpecificationId)
-    {
-        $product = Product::find($productId);
-        $supplier = $product->suppliers()->find($supplierId);
-        $productSpecification = $product->specifications()->find($productSpecificationId);
-
-        return $supplier->pivot->stock - $productSpecification->pivot->stock;
     }
 
     public function mount()
     {
         $this->fill(request()->only('category', 'sortBy', 'sortDirection'));
+        $this->currentProduct = null;
+    }
+
+    protected function calculateStock($products, $color, $size, $supplier)
+    {
+        $totalStock = 0;
+
+        foreach ($products as $product) {
+            $specifications = $product->productSpecifications;
+
+            $filteredSpecifications = $specifications
+                ->where('color_id', $color)
+                ->where('size_id', $size)
+                ->where('supplier_id', $supplier);
+
+            $totalStock += $filteredSpecifications->sum('stock');
+        }
+
+        return $totalStock;
+    }
+    public function viewProduct($productId)
+    {
+        // Redirect to the product-specific page using Livewire route
+        return redirect()->to("/product/{$productId}");
     }
 
 }
