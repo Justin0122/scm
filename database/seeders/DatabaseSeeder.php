@@ -33,29 +33,27 @@ class DatabaseSeeder extends Seeder
             'category_id' => \App\Models\Category::where('name', 'tops')->first()->id,
             'description' => 'coveralls description',
         ]);
-
-// Get the IDs of the suppliers
-        $supplierIds = [
+        $product->suppliers()->attach([
             \App\Models\Supplier::where('name', 'NSB')->first()->id,
             \App\Models\Supplier::where('name', 'ATLANSHIP')->first()->id,
             \App\Models\Supplier::where('name', 'CSM')->first()->id,
             \App\Models\Supplier::where('name', 'CTM')->first()->id,
             \App\Models\Supplier::where('name', 'SAFEEN')->first()->id,
-        ];
-
-        $sizes = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
-
-// Get the IDs of specifications
-        $colorSpecificationId = \App\Models\Specification::where('key', 'color')->first()->id;
-        $sizeSpecificationId = \App\Models\Specification::where('key', 'size')->first()->id;
-
-// Attach suppliers and specifications
-        $product->suppliers()->attach($supplierIds);
-        $product->specifications()->attach([
-            $colorSpecificationId => ['specification_value' => 'Blue'],
-            $sizeSpecificationId => ['specification_value' => 'S'],
         ]);
-
+        $colorSpecificationId = \App\Models\Specification::where('key', 'color')->first()->id;
+        $colors = ['Blue', 'Red', 'White'];
+        foreach ($colors as $color) {
+            $product->specifications()->attach([
+                $colorSpecificationId => ['specification_value' => $color],
+            ]);
+        }
+        $sizeSpecificationId = \App\Models\Specification::where('key', 'size')->first()->id;
+        $sizes = ['S', 'M', 'L', 'XL', '2XL', '3XL'];
+        foreach ($sizes as $size) {
+            $product->specifications()->attach([
+                $sizeSpecificationId => ['specification_value' => $size],
+            ]);
+        }
 
         $product = \App\Models\Product::create([
             'name' => 'white polo',
@@ -93,7 +91,7 @@ class DatabaseSeeder extends Seeder
 
         ]);
 
-        foreach ($sizes as $size) {
+        foreach($sizes as $size) {
             $product->specifications()->attach([
                 $sizeSpecificationId => ['specification_value' => $size],
             ]);
@@ -183,7 +181,7 @@ class DatabaseSeeder extends Seeder
 
         $product->save();
 
-        \App\Models\ProductStock::factory(10)->create();
+//        \App\Models\ProductStock::factory(10)->create();
 
     }
 }

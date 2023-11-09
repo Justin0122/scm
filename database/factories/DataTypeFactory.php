@@ -13,9 +13,8 @@ class DataTypeFactory extends Factory
     {
         $names = ['string', 'integer', 'float', 'boolean', 'date', 'datetime'];
         //make sure the name is unique
-        $name = $this->faker->unique()->randomElement($names);
         return [
-            'name' => $name
+            'name' => $this->faker->unique()->randomElement($names),
         ];
     }
 }

@@ -9,15 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('suppliers', function (Blueprint $table) {
-            $table->id();
+        Schema::create('products', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('name');
-            $table->string('address')->nullable()->default(null);
-            $table->string('phone')->nullable()->default(null);
-            $table->string('email')->nullable()->default(null);
+            $table->longtext('description')->nullable();
+            $table->bigInteger('category_id')->unsigned()->nullable();
             $table->timestamps();
+
+            $table->foreign('category_id')->references('id')->on('categories')->onDelete('set null');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('suppliers');
+        Schema::dropIfExists('products');
     }
 };

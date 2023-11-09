@@ -14,7 +14,7 @@ class SpecificationFactory extends Factory
         $specs = ['size', 'color'];
         return [
             'key' => $this->faker->unique()->randomElement($specs),
-            'data_type_id' => 1,
+            'data_type_id' => $this->faker->numberBetween(1, 6),
         ];
     }
 }

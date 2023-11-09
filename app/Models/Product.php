@@ -6,16 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'key',
+        'name',
         'category_id',
-        'description',
+        'description'
     ];
 
     public function category(): BelongsTo
@@ -25,21 +24,12 @@ class Product extends Model
 
     public function specifications(): BelongsToMany
     {
-        return $this->belongsToMany(Specification::class, 'product_stocks')
+        return $this->belongsToMany(Specification::class, 'product_specifications')
             ->withPivot('specification_value');
     }
 
     public function suppliers(): BelongsToMany
     {
-        return $this->belongsToMany(Supplier::class, 'product_stocks')
-            ->withPivot('quantity');
+        return $this->belongsToMany(Supplier::class, 'product_supplier');
     }
-
-    public function stock(): HasMany
-    {
-        return $this->hasMany(ProductStock::class);
-    }
-
-
-
 }

@@ -9,20 +9,18 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::create('product_stocks', function (Blueprint $table) {
+        Schema::create('product_specifications', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('product_id')->unsigned();
-            $table->bigInteger('specification_id')->unsigned()->nullable();
-            $table->string('specification_value')->nullable();
-            $table->bigInteger('supplier_id')->unsigned()->nullable();
-            $table->integer('quantity')->default(0);
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('specification_id');
+            $table->string('specification_value');
+            $table->integer('stock')->default(0);
             $table->timestamps();
 
             $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
             $table->foreign('specification_id')->references('id')->on('specifications')->onDelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
         });
     }
 
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('product_stocks');
+        Schema::dropIfExists('product_specifications');
     }
 };

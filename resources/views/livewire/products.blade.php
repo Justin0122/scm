@@ -69,11 +69,14 @@
                             <label for="spec-{{ $key }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">{{ ucfirst($key) }}</label>
                             <select id="spec-{{ $key }}" name="specifications[{{ $key }}]" class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
                                 @foreach ($specs as $specification)
-                                    <option value="{{ $specification->pivot->value }}">{{ $specification->pivot->value }}</option>
+                                    <option value="{{ $specification->pivot->specification_value }}">{{ $specification->pivot->specification_value }}</option>
                                 @endforeach
                             </select>
                         </div>
                     @endforeach
+
+
+
                 </td>
                 <td class="py-2 text-end px-4">
                     Created: {{ $product->created_at->format('d/m/Y')}} {{$product->created_at->diffForHumans() }}

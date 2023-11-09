@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Specification extends Model
 {
@@ -12,16 +12,23 @@ class Specification extends Model
 
     protected $fillable = [
         'key',
-        'data_type_id',
+        'data_type'
     ];
 
-    public function product(): BelongsTo
+    public function products(): BelongsToMany
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsToMany(Product::class, 'product_specification')
+            ->withPivot('stock');
     }
 
-    public function dataType(): BelongsTo
+    public function suppliers(): BelongsToMany
     {
-        return $this->belongsTo(DataType::class);
+        return $this->belongsToMany(Supplier::class, 'supplier_specification')
+            ->withPivot('value');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('key', 'like', '%' . $search . '%');
     }
 }

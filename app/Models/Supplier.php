@@ -4,27 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Supplier extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
         'name',
         'address',
-        'phone',
+        'contact_number',
         'email',
+        'website'
     ];
 
-    public function products(): HasMany
+    public function products(): BelongsToMany
     {
-        return $this->hasMany(Product::class);
+        return $this->belongsToMany(Product::class, 'product_supplier')
+            ->withPivot('stock');
     }
 
-    public function stock()
+    public function specifications(): BelongsToMany
     {
-        return $this->hasMany(ProductStock::class);
+        return $this->belongsToMany(Specification::class, 'supplier_specification')
+            ->withPivot('value');
+    }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('name', 'like', '%' . $search . '%');
     }
 }
