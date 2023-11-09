@@ -1,4 +1,4 @@
-<div>
+<div class="mx-4">
     <div class="mb-4">
         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400" for="search">
             <input wire:model.live="search" type="text"
@@ -53,7 +53,8 @@
         @foreach ($products as $product)
             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 {{ $loop->odd ? 'bg-gray-50 dark:bg-gray-900' : '' }} cursor-pointer">
                 <td class="py-2 px-4">
-                    <a href="#" class="text-blue-500 hover:text-blue-700" wire:click="viewProduct({{ $product->id }})">
+                    <a href="{{ $product->id }}"
+                       class="text-blue-500 hover:text-blue-700" wire:navigate.hover>
                         {{ $product->name }}
                     </a>
                 </td>

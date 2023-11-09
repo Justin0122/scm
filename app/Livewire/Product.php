@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use App\Models\Product as ProductModel;
 
 class Product extends Component
 {
@@ -15,16 +16,11 @@ class Product extends Component
 
     public function render()
     {
-        //find all combinations from product_specifications table where product_id = $this->productId and return the result.
-        $productSpecifications = \App\Models\ProductSpecification::where('product_id', $this->productId)->get();
-        $product = \App\Models\Product::find($this->productId);
-        $product->load('category', 'colors', 'sizes', 'suppliers');
-        $product->load('productSpecifications');
-        dd($product);
+        //find all product specifications from the product where product_id is equal to the product id
+        $productSpecifications = ProductModel::find($this->productId)->productSpecifications;
+
         return view('livewire.product', [
-            'product' => $product,
             'productSpecifications' => $productSpecifications,
         ]);
     }
-
 }

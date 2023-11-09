@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class dropdwon extends Component
+class table extends Component
 {
     /**
      * Create a new component instance.
@@ -21,6 +21,6 @@ class dropdwon extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.dropdwon');
+        return view('components.table');
     }
 }
