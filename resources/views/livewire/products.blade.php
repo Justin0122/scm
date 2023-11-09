@@ -53,7 +53,7 @@
         @foreach ($products as $product)
             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 {{ $loop->odd ? 'bg-gray-50 dark:bg-gray-900' : '' }} cursor-pointer">
                 <td class="py-2 px-4">
-                    <a href="{{ $product->id }}"
+                    <a href="{{ route('product', $product) }}"
                        class="text-blue-500 hover:text-blue-700" wire:navigate.hover>
                         {{ $product->name }}
                     </a>
