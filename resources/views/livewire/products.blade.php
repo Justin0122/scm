@@ -1,9 +1,16 @@
-<div>
+<div class="mx-4">
     <div class="mb-4">
         <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400" for="search">
-            <input wire:model.live="search" type="text" class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" placeholder="Search products...">
+            <input wire:model.live="search" type="text"
+                   class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                   placeholder="Search products...">
         </label>
     </div>
+    @if ($products->count() >= 10)
+        <div class="mt-4">
+            {{ $products->links() }}
+        </div>
+    @endif
     <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
         <thead>
         <tr>
@@ -21,6 +28,7 @@
             </th>
             <th class="px-4 py-2">Supplier</th>
             <th class="px-4 py-2">Specs</th>
+            <th class="px-4 py-2">Stock</th>
             <th class="px-4 py-2 grid grid-cols-2">
                 <label class="block">
                     <select wire:model.live="sortBy"
@@ -28,7 +36,6 @@
                         <option value="name">Name</option>
                         <option value="created_at">Created At</option>
                         <option value="updated_at">Updated At</option>
-                        <option value="supplier_id">Supplier</option>
                     </select>
                 </label>
 
@@ -45,36 +52,45 @@
         <tbody>
         @foreach ($products as $product)
             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700 {{ $loop->odd ? 'bg-gray-50 dark:bg-gray-900' : '' }} cursor-pointer">
-                <td class="py-2 px-4">{{ $product->name }}</td>
+                <td class="py-2 px-4">
+                    <a href="{{ route('product', $product) }}"
+                       class="text-blue-500 hover:text-blue-700" wire:navigate.hover>
+                        {{ $product->name }}
+                    </a>
+                </td>
                 <td class="py-2 px-4">{{ $product->category->name }}</td>
                 <td class="py-2 px-4">
                     @if ($product->suppliers->count() > 1)
-                        <select wire:model="supplier" class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                            <option value="">All Suppliers</option>
-                            @foreach ($product->suppliers as $supplier)
-                                <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
-                            @endforeach
-                        </select>
+                        <label>
+                            <select wire:model.live="supplierId"
+                                    class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                                <option value="">All Suppliers</option>
+                                @foreach ($product->suppliers->unique('id') as $supplier)
+                                    <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                @endforeach
+                            </select>
+                        </label>
                     @else
                         {{ $product->suppliers->first()->name ?? 'N/A' }}
                     @endif
                 </td>
-                <td class="py-2 px-4">
-                    @php
-                        $groupedSpecifications = $product->specifications->groupBy('key');
-                    @endphp
-
-                    @foreach ($groupedSpecifications as $key => $specs)
-                        <div class="mb-2">
-                            <label for="spec-{{ $key }}" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400">{{ ucfirst($key) }}</label>
-                            <select id="spec-{{ $key }}" name="specifications[{{ $key }}]" class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                                @foreach ($specs as $specification)
-                                    <option value="{{ $specification->pivot->value }}">{{ $specification->pivot->value }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @endforeach
+                <td class="py-2 px-4 grid grid-cols-2 gap-2">
+                    <x-dropdown-input :items="$product->colors" selected="color" allLabel="All Colors" naLabel="N/A"/>
+                    <x-dropdown-input :items="$product->sizes" selected="size" allLabel="All Sizes" naLabel="N/A"/>
                 </td>
+
+                <td class="py-2 px-4">
+                    @if ($color || $size || $supplierId)
+                        {{ $product->totalStockForColorSizeAndSupplier($color, $size, $supplierId) }}
+                    @else
+                        @if ($product->stock > 0)
+                            {{ $product->stock }}
+                        @else
+                            Out of stock
+                        @endif
+                    @endif
+                </td>
+
                 <td class="py-2 text-end px-4">
                     Created: {{ $product->created_at->format('d/m/Y')}} {{$product->created_at->diffForHumans() }}
                 </td>
