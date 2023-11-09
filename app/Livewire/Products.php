@@ -97,10 +97,4 @@ class Products extends Component
 
         return $totalStock;
     }
-    public function viewProduct($productId)
-    {
-        // Redirect to the product-specific page using Livewire route
-        return redirect()->to("/product/{$productId}");
-    }
-
 }
