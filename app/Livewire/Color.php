@@ -20,12 +20,12 @@ class Color extends Component
 
     public function render()
     {
-        if ($this->id && !ColorModel::find($this->id)) {
+        if ($this->id && !ColorModel::withTrashed()->find($this->id)) {
             $this->id = '';
         }
     return view('livewire.Color.index',
         [
-            'results' => $this->id ? ColorModel::find($this->id) : ColorModel::paginate(10),
+            'results' => $this->id ? ColorModel::withTrashed()->find($this->id) : ColorModel::withTrashed()->paginate(10),
             'fillables' => (new ColorModel())->getFillable(),
             'url' => current(explode('?', url()->current())),
         ]);
@@ -42,7 +42,7 @@ class Color extends Component
 
     public function update()
     {
-        $Color = ColorModel::find($this->id);
+        $Color = ColorModel::withTrashed()->find($this->id);
         foreach ($this->form as $key => $value) {
             $Color->$key = $value;
         }
@@ -53,6 +53,14 @@ class Color extends Component
     {
         $Color = ColorModel::find($id);
         $Color->delete();
+
+        return redirect()->back();
+    }
+
+    public function restore($id)
+    {
+        $Color = ColorModel::withTrashed()->find($id);
+        $Color->restore();
 
         return redirect()->back();
     }
