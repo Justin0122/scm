@@ -17,7 +17,7 @@ class Product extends Component
     public function render()
     {
         //find all product specifications from the product where product_id is equal to the product id
-        $productSpecifications = ProductModel::find($this->productId)->productSpecifications;
+        $productSpecifications = ProductModel::withTrashed()->find($this->productId)->productSpecifications()->get();
 
         return view('livewire.product', [
             'productSpecifications' => $productSpecifications,

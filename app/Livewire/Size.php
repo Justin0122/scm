@@ -20,12 +20,12 @@ class Size extends Component
 
     public function render()
     {
-        if ($this->id && !SizeModel::find($this->id)) {
+        if ($this->id && !SizeModel::withTrashed()->find($this->id)) {
             $this->id = '';
         }
     return view('livewire.Size.index',
         [
-            'results' => $this->id ? SizeModel::find($this->id) : SizeModel::paginate(10),
+            'results' => $this->id ? SizeModel::withTrashed()->find($this->id) : SizeModel::withTrashed()->paginate(10),
             'fillables' => (new SizeModel())->getFillable(),
             'url' => current(explode('?', url()->current())),
         ]);
@@ -42,7 +42,7 @@ class Size extends Component
 
     public function update()
     {
-        $Size = SizeModel::find($this->id);
+        $Size = SizeModel::withTrashed()->find($this->id);
         foreach ($this->form as $key => $value) {
             $Size->$key = $value;
         }
@@ -53,6 +53,14 @@ class Size extends Component
     {
         $Size = SizeModel::find($id);
         $Size->delete();
+
+        return redirect()->back();
+    }
+
+    public function restore($id)
+    {
+        $Size = SizeModel::withTrashed()->find($id);
+        $Size->restore();
 
         return redirect()->back();
     }
