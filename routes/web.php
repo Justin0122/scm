@@ -25,13 +25,12 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/product/{productId}', function ($productId) {
+        return view('product', compact('productId'));
+    })->name('product');
+
+    Route::get('/crud', function () {
+        return view('crud');
+    })->name('crud');
 });
-
-Route::get('/product/{productId}', function ($productId) {
-    return view('product', compact('productId'));
-})->name('product');
-
-
-Route::get('/crud', function () {
-    return view('crud');
-})->name('crud');

@@ -17,7 +17,6 @@ class Size extends Component
 
     public $url = '';
 
-
     public function render()
     {
         if ($this->id && !SizeModel::withTrashed()->find($this->id)) {
