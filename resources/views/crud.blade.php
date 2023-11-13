@@ -13,7 +13,7 @@
         @foreach($pages as $page)
             <li wire:navigate.hover href="{{ route('crud', ['type' => $page]) }}"
                 class="cursor-pointer hover:text-teal-500 transition duration-300 ease-in-out {{ request()->type == $page ? 'text-teal-500' : '' }}">
-            {{ ucfirst($page) }}
+            {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $page))) }}
         @endforeach
     </ul>
 </div>

@@ -47,6 +47,19 @@
                         <option value="desc">Descending</option>
                     </select>
                 </label>
+                <label class="block">
+                    <select wire:model.live="perPage"
+                            class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                        @foreach ([10, 20, 50, 100] as $value)
+                            <option value="{{ $value }}">{{ $value }} per page</option>
+                        @endforeach
+                    </select>
+                </label>
+                <label class="block">
+                    <input wire:model.live="showDeleted" type="checkbox"
+                           class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 mr-2">
+                    Show Deleted
+                </label>
             </th>
             <th class="px-4 py-2">Actions</th>
 

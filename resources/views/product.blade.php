@@ -5,14 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="mx-auto py-10 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-6">
-            <div class="col-span-3">
-                @livewire('products')
-            </div>
-            <div class="col-span-3">
-                @livewire('product')
-            </div>
-        </div>
+    <div class="mx-auto py-10 sm:px-6 lg:px-8 dark:text-gray-200 max-w-7xl">
+        @livewire('product')
     </div>
 </x-app-layout>

@@ -23,6 +23,8 @@ class Products extends Component
     public $size;
     public $supplierId;
     public $form = [];
+    public $perPage = 10;
+    public $showDeleted = false;
 
     public function render()
     {
@@ -36,13 +38,21 @@ class Products extends Component
             ->when($this->size, fn ($query) => $query->whereHas('sizes', fn ($q) => $q->where('sizes.id', $this->size)))
             ->when($this->supplierId, fn ($query) => $query->whereHas('suppliers', fn ($q) => $q->where('suppliers.id', $this->supplierId)));
 
+        if ($this->showDeleted) {
+            $query->onlyTrashed();
+        }
         $query->orderBy($this->sortBy, $this->sortDirection);
 
-        $products = $query->paginate(10);
+        $products = $query->paginate($this->perPage);
 
         if (!$products->count()) {
             $this->resetPage();
-            $products = $query->paginate(10);
+            $products = $query->paginate($this->perPage);
+        }
+
+        if($this->perPage){
+            session()->remove('perPage');
+            session()->put('perPage', $this->perPage);
         }
 
         $stock = $this->calculateStock($products, $this->color, $this->size, $this->supplierId);
@@ -59,6 +69,7 @@ class Products extends Component
     {
         $this->fill(request()->only('category', 'sortBy', 'sortDirection'));
         $this->currentProduct = null;
+        $this->perPage = session()->get('perPage', 10);
     }
 
     protected function calculateStock($products, $color, $size, $supplier)
