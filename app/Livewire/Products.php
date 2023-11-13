@@ -7,6 +7,7 @@ use App\Models\Product;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Models\SizeGroup;
 
 class Products extends Component
 {
@@ -21,6 +22,7 @@ class Products extends Component
     public $sortDirection = 'asc';
     public $color;
     public $size;
+    public $selectedSizeGroup;
     public $supplierId;
 
     public function render()
@@ -48,6 +50,7 @@ class Products extends Component
 
         return view('livewire.products', [
             'products' => $products,
+            'sizeGroups' => SizeGroup::all(),
             'categories' => Category::all(),
             'stock' => $stock,
         ]);

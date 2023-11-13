@@ -4,11 +4,13 @@
     @else
         @include('livewire.crud.create')
 
-        {{ $results->links() }}
+        @if ($results->count())
+            {{ $results->links() }}
 
-        <div class="mt-4">
-            <x-table :results="$results" :type="'size'" />
+            <div class="mt-4">
+                <x-table :results="$results" :type="'size'"/>
 
-        </div>
+            </div>
+        @endif
     @endif
 </div>

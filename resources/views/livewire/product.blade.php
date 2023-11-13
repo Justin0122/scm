@@ -1,7 +1,8 @@
-<div class="max-w-md mt-8 p-6 bg-white rounded-md shadow-md dark:bg-gray-800 dark:text-gray-200">
-    @if (isset($product))
-        <h1 class="text-2xl font-bold mb-4">{{ $product->name }}</h1>
-    @endif
+<div class="mt-8 p-6 bg-white rounded-md shadow-md dark:bg-gray-800 dark:text-gray-200">
+    <x-section-title>
+        <x-slot name="title">Add {{ $product->name ? $product->name : 'New Product' }}</x-slot>
+        <x-slot name="description">Add a new {{ $product->name ? $product->name : 'product' }} to the system.</x-slot>
+    </x-section-title>
 
     <form wire:submit.prevent`="create">
         @csrf
@@ -17,14 +18,15 @@
         </div>
 
         <div class="flex flex-col">
-            <label for="size" class="text-lg font-semibold mb-2">Size</label>
-            <select wire:model="form.size" name="size" id="size"
-                    class="border rounded-md p-2 mb-4 dark:bg-gray-700 dark:text-gray-200">
-                <option value="">Select a size</option>
-                @foreach($sizes as $size)
-                    <option value="{{ $size->id }}">{{ $size->key }}</option>
-                @endforeach
-            </select>
+            <label for="size_group" class="text-lg font-semibold mb-2">Size Group</label>
+                <select wire:model="form.size_group"
+                        class="border rounded-md p-2 mb-4 dark:bg-gray-700 dark:text-gray-200">
+                    <option value="">Select Size Group</option>
+                    @foreach ($sizeGroups as $sizeGroup)
+                        <option value="{{ $sizeGroup->id }}">{{ $sizeGroup->name }}</option>
+                    @endforeach
+                </select>
+            </label>
         </div>
 
         <div class="flex flex-col">
@@ -44,30 +46,34 @@
                    class="border rounded-md p-2 mb-4 dark:bg-gray-700 dark:text-gray-200">
         </div>
 
+        <x-button>Save</x-button>
     </form>
-    @foreach($productSpecifications as $specification)
-        <div class="mb-4 border-b pb-4">
-            <p class="text-lg font-semibold">
-                @if (isset($specification->supplier))
-                    <span class="text-purple-500">{{ $specification->supplier->name }}</span>
-                @endif
-                @if (isset($specification->size))
-                    - <span class="text-blue-500">{{ $specification->size->key }}</span>
-                @else
-                    - <span class="text-blue-500">N/A</span>
-                @endif
-                @if (isset($specification->color))
-                    - <span class="text-green-500">{{ $specification->color->key }}</span>
-                @else
-                    - <span class="text-blue-500">N/A</span>
-                @endif
-                <button wire:click="delete({{ $specification->id }})"
-                        class="text-red-500 hover:text-red-700">Delete
-                </button>
-            </p>
-            <p class="text- {{ $specification->stock > 5 ? 'text-green-500' : 'text-red-500'}}">
-                Stock: <span class="font-bold">{{ $specification->stock }}</span>
-            </p>
+        <x-section-border />
+
+        <div class="mx-4 grid grid-cols-2 gap-4">
+            @foreach($productSpecifications as $specification)
+                <div class="mb-4 border-b pb-4">
+                    <p class="text-lg font-semibold">
+                        @if (isset($specification->supplier))
+                            <span class="text-purple-500">{{ $specification->supplier->name }}</span>
+                        @endif
+                        @if (isset($specification->size))
+                            - <span class="text-blue-500">{{ $specification->size->key }}</span>
+                        @else
+                            - <span class="text-blue-500">N/A</span>
+                        @endif
+                        @if (isset($specification->color))
+                            - <span class="text-green-500">{{ $specification->color->key }}</span>
+                        @else
+                            - <span class="text-blue-500">N/A</span>
+                        @endif
+                        <x-danger-button wire:click="delete({{ $specification->id }})">Delete</x-danger-button>
+                    </p>
+                    <p class="text- {{ $specification->stock > 5 ? 'text-green-500' : 'text-red-500'}}">
+                        Stock: <span class="font-bold">{{ $specification->stock }}</span>
+                    </p>
+                </div>
+            @endforeach
         </div>
-    @endforeach
+
 </div>
