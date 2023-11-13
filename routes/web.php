@@ -26,6 +26,10 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+    Route::get('/products', function () {
+        return view('products');
+    })->name('products');
+
     Route::get('/product/{productId}', function ($productId) {
         return view('product', compact('productId'));
     })->name('product');

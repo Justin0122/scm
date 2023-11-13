@@ -87,14 +87,14 @@
                     <span class="text-purple-500">{{ $specification->supplier->name }}</span>
                 @endif
                 @if (isset($specification->size))
-                    - <span class="text-blue-500">{{ $specification->size->key }}</span>
+                    - <span class="text-indigo-700">{{ $specification->size->key }}</span>
                 @else
-                    - <span class="text-blue-500">N/A</span>
+                    - <span class="text-indigo-700">N/A</span>
                 @endif
                 @if (isset($specification->color))
                     - <span class="text-green-500">{{ $specification->color->key }}</span>
                 @else
-                    - <span class="text-blue-500">N/A</span>
+                    - <span class="text-indigo-700">N/A</span>
                 @endif
                 <x-danger-button wire:click="delete({{ $specification->id }})">Delete</x-danger-button>
             </p>

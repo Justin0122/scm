@@ -12,8 +12,8 @@
                 />
             </div>
         @endforeach
-        <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition duration-300">
-            Create
-        </button>
+        <x-button>
+            Save
+        </x-button>
     </form>
 </div>

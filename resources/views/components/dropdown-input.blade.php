@@ -1,4 +1,4 @@
-@props(['items', 'selected', 'allLabel', 'naLabel', 'multiple' => false])
+@props(['items', 'selected', 'allLabel', 'multiple' => false])
 
 <label>
     <select wire:model.live="{{ $selected }}" class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200" {{ $multiple ? 'multiple' : '' }}>
@@ -8,8 +8,6 @@
 
         @if ($uniqueItems->count() >= 1 && isset($allLabel))
             <option value="">{{ $allLabel }}</option>
-        @elseif (isset($naLabel))
-            <option value="">{{ $naLabel }}</option>
         @endif
 
         @foreach ($uniqueItems as $item)
@@ -17,3 +15,4 @@
         @endforeach
     </select>
 </label>
+

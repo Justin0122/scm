@@ -22,6 +22,7 @@ class Products extends Component
     public $color;
     public $size;
     public $supplierId;
+    public $form = [];
 
     public function render()
     {
@@ -76,5 +77,34 @@ class Products extends Component
         }
 
         return $totalStock;
+    }
+
+    public function create()
+    {
+        if (!isset($this->form['category_id'])) {
+            $this->form['category_id'] = null;
+        }
+        Product::create([
+            'name' => ucwords($this->form['name']),
+            'category_id' => $this->form['category_id'],
+        ]);
+    }
+
+    public function delete($id)
+    {
+        $product = Product::find($id);
+        $product->delete();
+    }
+
+    public function restore($id)
+    {
+        $product = Product::withTrashed()->find($id);
+        $product->restore();
+    }
+
+    public function forceDelete($id)
+    {
+        $product = Product::withTrashed()->find($id);
+        $product->forceDelete();
     }
 }
