@@ -37,9 +37,10 @@
                 </td>
                 <td class="py-2 px-4">
                     <div class="flex">
-                        <a href="{{'?type=' . $type . '&id=' . $result->id}}"
-                           class="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">
-                            View
+                        <a href="{{'?type=' . $type . '&id=' . $result->id}}" class="mr-2">
+                            <x-secondary-button>
+                                Edit
+                            </x-secondary-button>
                         </a>
                         <x-danger-button wire:click="delete({{ $result->id }})" wire:confirm="Are you sure you want to delete {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $type))) }} {{ $result->key ?? $result->name }}?">
                         Delete

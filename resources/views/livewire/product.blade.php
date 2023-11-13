@@ -8,18 +8,12 @@
         @csrf
         <div class="flex flex-col">
             <label for="supplier" class="text-lg font-semibold mb-2">Supplier</label>
-            <select wire:model="form.supplier" name="supplier" id="supplier"
-                    class="border rounded-md p-2 mb-4 dark:bg-gray-700 dark:text-gray-200">
-                <option value="">Select a supplier</option>
-                @foreach($suppliers as $supplier)
-                    <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
-                @endforeach
-            </select>
+            <x-dropdown-input :items="$suppliers" selected="form.supplier" :multiple="true" :live="false"/>
         </div>
 
         <div class="flex flex-col">
             <label for="size_group" class="text-lg font-semibold mb-2">Size Group</label>
-            <select wire:model="form.size_group"
+            <select wire:model.live="form.size_group"
                     class="border rounded-md p-2 mb-4 dark:bg-gray-700 dark:text-gray-200">
                 <option value="">Select Size Group</option>
                 @foreach ($sizeGroups as $sizeGroup)
@@ -27,23 +21,21 @@
                 @endforeach
             </select>
             </label>
+            <div class="flex">
+                @foreach($sizeFromSelectedGroup as $size)
+                    <div class="mr-2">
+                        <p class="text-sm font-semibold text-gray-600">
+                            {{ $size->key }}
+                        </p>
+                    </div>
+                @endforeach
+            </div>
+
         </div>
 
         <div class="flex flex-col">
             <label for="color" class="text-lg font-semibold mb-2">Color</label>
-            <select wire:model="form.color" name="color" id="color"
-                    class="border rounded-md p-2 mb-4 dark:bg-gray-700 dark:text-gray-200">
-                <option value="">Select a color</option>
-                @foreach($colors as $color)
-                    <option value="{{ $color->id }}">{{ $color->key }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="flex flex-col">
-            <label for="stock" class="text-lg font-semibold mb-2">Stock</label>
-            <input wire:model="form.stock" type="number" name="stock" id="stock"
-                   class="border rounded-md p-2 mb-4 dark:bg-gray-700 dark:text-gray-200">
+            <x-dropdown-input :items="$colors" selected="form.color" :multiple="true" :live="false"/>
         </div>
 
         <x-button>Save</x-button>
@@ -87,14 +79,14 @@
                     <span class="text-purple-500">{{ $specification->supplier->name }}</span>
                 @endif
                 @if (isset($specification->size))
-                    - <span class="text-blue-500">{{ $specification->size->key }}</span>
+                    - <span class="text-indigo-700">{{ $specification->size->key }}</span>
                 @else
-                    - <span class="text-blue-500">N/A</span>
+                    - <span class="text-indigo-700">N/A</span>
                 @endif
                 @if (isset($specification->color))
                     - <span class="text-green-500">{{ $specification->color->key }}</span>
                 @else
-                    - <span class="text-blue-500">N/A</span>
+                    - <span class="text-indigo-700">N/A</span>
                 @endif
                 <x-danger-button wire:click="delete({{ $specification->id }})">Delete</x-danger-button>
             </p>

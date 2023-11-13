@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="mx-auto py-10 sm:px-6 lg:px-8 dark:text-gray-200 max-w-7xl">
-        @livewire('product')
+    <div class="mx-auto py-10 sm:px-6 lg:px-8">
+        @livewire('products')
     </div>
 </x-app-layout>
