@@ -13,7 +13,7 @@
         @endif
 
         @foreach ($uniqueItems as $item)
-            <option value="{{ $item->id }}">{{ $item->key ?? $item->name }}{{ $item->id }}</option>
+            <option value="{{ $item->id }}">{{ $item->key ?? $item->name }}</option>
         @endforeach
     </select>
 </label>
