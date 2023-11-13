@@ -9,7 +9,6 @@
     <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
         <thead>
         <tr>
-            <!-- get fillables from model -->
             @foreach ($results->first()->getFillable() as $field)
                 <th class="px-4 py-2 text-left">{{ ucfirst($field) }}</th>
             @endforeach
@@ -42,9 +41,9 @@
                            class="px-2 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">
                             View
                         </a>
-                        <button wire:click="delete({{ $result->id }})" class="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 transition duration-300 ease-in-out">
-                            Delete
-                        </button>
+                        <x-danger-button wire:click="delete({{ $result->id }})" wire:confirm="Are you sure you want to delete {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $type))) }} {{ $result->key ?? $result->name }}?">
+                        Delete
+                        </x-danger-button>
                     </div>
                 </td>
             </tr>

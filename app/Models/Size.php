@@ -20,4 +20,10 @@ class Size extends Model
     {
         return $this->belongsToMany(Product::class);
     }
+
+    public function sizeGroup()
+    {
+        return $this->belongsTo(SizeGroup::class);
+    }
+
 }
