@@ -20,12 +20,12 @@ class Supplier extends Component
 
     public function render()
     {
-        if ($this->id && !SupplierModel::find($this->id)) {
+        if ($this->id && !SupplierModel::withTrashed()->find($this->id)) {
             $this->id = '';
         }
     return view('livewire.Supplier.index',
         [
-            'results' => $this->id ? SupplierModel::find($this->id) : SupplierModel::paginate(10),
+            'results' => $this->id ? SupplierModel::withTrashed()->find($this->id) : SupplierModel::withTrashed()->paginate(10),
             'fillables' => (new SupplierModel())->getFillable(),
             'url' => current(explode('?', url()->current())),
         ]);
@@ -42,7 +42,7 @@ class Supplier extends Component
 
     public function update()
     {
-        $Supplier = SupplierModel::find($this->id);
+        $Supplier = SupplierModel::withTrashed()->find($this->id);
         foreach ($this->form as $key => $value) {
             $Supplier->$key = $value;
         }

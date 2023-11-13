@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
     @php
-        $pages = ['supplier', 'color', 'size'];
+        $pages = ['supplier', 'color', 'size', 'sizeGroup'];
     @endphp
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         <div class="col-span-1 filter flex flex-col mt-20">

@@ -29,31 +29,11 @@ class Products extends Component
             ->where(function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%')
                     ->orWhere('description', 'like', '%' . $this->search . '%');
-            });
-
-        if ($this->category) {
-            $query->whereHas('category', function ($query) {
-                $query->where('id', $this->category);
-            });
-        }
-
-        if ($this->color) {
-            $query->whereHas('colors', function ($query) {
-                $query->where('colors.id', $this->color);
-            });
-        }
-
-        if ($this->size) {
-            $query->whereHas('sizes', function ($query) {
-                $query->where('sizes.id', $this->size);
-            });
-        }
-
-        if ($this->supplierId) {
-            $query->whereHas('suppliers', function ($query) {
-                $query->where('suppliers.id', $this->supplierId);
-            });
-        }
+            })
+            ->when($this->category, fn ($query) => $query->whereHas('category', fn ($q) => $q->where('id', $this->category)))
+            ->when($this->color, fn ($query) => $query->whereHas('colors', fn ($q) => $q->where('colors.id', $this->color)))
+            ->when($this->size, fn ($query) => $query->whereHas('sizes', fn ($q) => $q->where('sizes.id', $this->size)))
+            ->when($this->supplierId, fn ($query) => $query->whereHas('suppliers', fn ($q) => $q->where('suppliers.id', $this->supplierId)));
 
         $query->orderBy($this->sortBy, $this->sortDirection);
 
