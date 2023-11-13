@@ -20,7 +20,6 @@
                     <option value="{{ $sizeGroup->id }}">{{ $sizeGroup->name }}</option>
                 @endforeach
             </select>
-            </label>
             <div class="flex">
                 @foreach($sizeFromSelectedGroup as $size)
                     <div class="mr-2">
