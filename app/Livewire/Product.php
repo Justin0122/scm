@@ -58,9 +58,9 @@ class Product extends Component
             'filter_colors' => $colors,
             'filter_suppliers' => $suppliers,
             'sizeGroups' => \App\Models\SizeGroup::all(),
-            'sizes' => $sizes,
-            'colors' => $colors,
-            'suppliers' => $suppliers,
+            'sizes' => \App\Models\Size::all(),
+            'colors' => \App\Models\Color::all(),
+            'suppliers' => \App\Models\Supplier::all(),
         ]);
     }
     public function create()
