@@ -42,3 +42,7 @@ Route::middleware([
         return view('audittrail');
     })->name('audit-trail');
 });
+
+Route::get('/register', function () {
+    return view('welcome');
+});
