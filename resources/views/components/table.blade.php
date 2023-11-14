@@ -1,11 +1,4 @@
-<!-- ProductTable.blade.php -->
-
 <div class="mx-4">
-    <div class="mb-4">
-
-    </div>
-
-    <!-- Product table -->
     <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
         <thead>
         <tr>
@@ -59,7 +52,7 @@
     </table>
 
     <!-- Pagination links -->
-    <div class="mt-4">
+    <div class="p-4">
         {{ $results->links() }}
     </div>
 </div>

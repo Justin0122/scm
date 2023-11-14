@@ -6,11 +6,9 @@
                    placeholder="Search products...">
         </label>
     </div>
-    @if ($products->count() >= 10)
-        <div class="mt-4">
-            {{ $products->links() }}
-        </div>
-    @endif
+    <div class="mt-4">
+        {{ $products->links() }}
+    </div>
     <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
         <thead>
         <tr>
@@ -108,7 +106,7 @@
                     </a>
                 </td>
                 <td class="py-2 px-4">
-                    {{ $product->category->name ?? 'N/A' }}
+                {{ $product->category->name ?? 'N/A' }}
                 <td class="py-2 px-4">
                     @if ($product->suppliers->count() > 1)
                         <label>
@@ -159,13 +157,14 @@
                 <td class="py-2 px-4">
                     <div class="flex justify-end">
                         @if(isset($product->deleted_at))
-                            <x-secondary-button class="mr-2" wire:click="restore({{ $product->id }})">Restore</x-secondary-button>
+                            <x-secondary-button class="mr-2" wire:click="restore({{ $product->id }})">Restore
+                            </x-secondary-button>
                             <x-danger-button wire:click="forceDelete({{ $product->id }})"
                                              wire:confirm="Are you sure you want to delete {{ ucwords($product->name) }}?">
                                 Force Delete
                             </x-danger-button>
                         @else
-                        <x-danger-button wire:click="delete({{ $product->id }})">Delete</x-danger-button>
+                            <x-danger-button wire:click="delete({{ $product->id }})">Delete</x-danger-button>
                         @endif
                     </div>
                 </td>

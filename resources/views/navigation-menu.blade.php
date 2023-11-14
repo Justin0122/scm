@@ -21,6 +21,9 @@
                     <x-nav-link href="{{ route('crud', ['type' => 'supplier']) }}" :active="request()->routeIs('crud')">
                         {{ __('Crud') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('audit-trail') }}" :active="request()->routeIs('audit-trail')">
+                        {{ __('Audit Trail') }}
+                    </x-nav-link>
                 </div>
             </div>
 

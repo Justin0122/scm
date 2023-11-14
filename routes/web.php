@@ -37,4 +37,8 @@ Route::middleware([
     Route::get('/crud', function () {
         return view('crud');
     })->name('crud');
+
+    Route::get('/audit-trail', function () {
+        return view('audittrail');
+    })->name('audit-trail');
 });
