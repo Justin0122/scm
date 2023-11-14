@@ -8,7 +8,6 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class SizeGroup extends Model implements Auditable
 {
-    use HasFactory;
     use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
