@@ -59,9 +59,18 @@
                                 Edit
                             </x-secondary-button>
                         </a>
-                        <x-danger-button wire:click="delete({{ $result->id }})" wire:confirm="Are you sure you want to delete {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $type))) }} {{ $result->key ?? $result->name }}?">
+                        @if ($result->deleted_at)
+                            <x-button wire:click="restore({{ $result->id }})">
+                                Restore
+                            </x-button>
+                            <x-danger-button wire:click="forceDelete({{ $result->id }})" wire:confirm="Are you sure you want to force delete {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $type))) }} {{ $result->key ?? $result->name }}?">
+                                Force Delete
+                            </x-danger-button>
+                        @else
+                        <x-danger-button wire:click="delete({{ $result->id }})">
                         Delete
                         </x-danger-button>
+                        @endif
                     </div>
                 </td>
             </tr>

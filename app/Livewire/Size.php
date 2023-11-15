@@ -63,4 +63,12 @@ class Size extends Component
 
         return redirect()->back();
     }
+
+    public function forceDelete($id)
+    {
+        $Size = SizeModel::withTrashed()->find($id);
+        $Size->forceDelete();
+
+        return redirect()->back();
+    }
 }

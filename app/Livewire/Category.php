@@ -20,12 +20,12 @@ class Category extends Component
 
     public function render()
     {
-        if ($this->id && !CategoryModel::find($this->id)) {
+        if ($this->id && !CategoryModel::withTrashed()->find($this->id)) {
             $this->id = '';
         }
     return view('livewire.Category.index',
         [
-            'results' => $this->id ? CategoryModel::find($this->id) : CategoryModel::paginate(10),
+            'results' => $this->id ? CategoryModel::withTrashed()->find($this->id) : CategoryModel::withTrashed()->paginate(10),
             'fillables' => (new CategoryModel())->getFillable(),
             'url' => current(explode('?', url()->current())),
         ]);
@@ -42,7 +42,7 @@ class Category extends Component
 
     public function update()
     {
-        $Category = CategoryModel::find($this->id);
+        $Category = CategoryModel::withTrashed()->find($this->id);
         foreach ($this->form as $key => $value) {
             $Category->$key = $value;
         }
@@ -54,6 +54,22 @@ class Category extends Component
         $Category = CategoryModel::find($id);
         $Category->delete();
 
-        return redirect()->route(strtolower('Category'));
+        return redirect()->back();
+    }
+
+    public function restore($id)
+    {
+        $Category = CategoryModel::withTrashed()->find($id);
+        $Category->restore();
+
+        return redirect()->back();
+    }
+
+    public function forceDelete($id)
+    {
+        $Category = CategoryModel::withTrashed()->find($id);
+        $Category->forceDelete();
+
+        return redirect()->back();
     }
 }
