@@ -33,14 +33,10 @@
                 Show Deleted
             </label>
 
-            <select wire:model.live="perPage"
-                    class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                @foreach ([10, 20, 50, 100] as $value)
-                    <option value="{{ $value }}">{{ $value }} per page</option>
-                @endforeach
-            </select>
+            <x-select-per-page />
 
-            <x-danger-button wire:click="clearFilters">
+            <x-button wire:click="clearFilters">
+
                 Clear Filters
             </x-danger-button>
         </div>

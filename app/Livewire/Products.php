@@ -28,20 +28,27 @@ class Products extends Component
 
     public function render()
     {
-        $query = Product::withTrashed()
-            ->where(function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('description', 'like', '%' . $this->search . '%');
-            })
-            ->when($this->category, fn ($query) => $query->whereHas('category', fn ($q) => $q->where('id', $this->category)))
-            ->when($this->color, fn ($query) => $query->whereHas('colors', fn ($q) => $q->where('colors.id', $this->color)))
-            ->when($this->size, fn ($query) => $query->whereHas('sizes', fn ($q) => $q->where('sizes.id', $this->size)))
-            ->when($this->supplierId, fn ($query) => $query->whereHas('suppliers', fn ($q) => $q->where('suppliers.id', $this->supplierId)));
-
         if ($this->showDeleted) {
-            $query->onlyTrashed();
+            $query = Product::onlyTrashed();
+        } else {
+            $query = Product::withoutTrashed();
         }
+
+        $query->where(function ($query) {
+        $query->where('name', 'like', '%' . $this->search . '%')
+            ->orWhere('description', 'like', '%' . $this->search . '%');
+    })
+        ->when($this->category, fn ($query) => $query->whereHas('category', fn ($q) => $q->where('id', $this->category)))
+        ->when($this->color, fn ($query) => $query->whereHas('colors', fn ($q) => $q->where('colors.id', $this->color)))
+        ->when($this->size, fn ($query) => $query->whereHas('sizes', fn ($q) => $q->where('sizes.id', $this->size)))
+        ->when($this->supplierId, fn ($query) => $query->whereHas('suppliers', fn ($q) => $q->where('suppliers.id', $this->supplierId)));
+
         $query->orderBy($this->sortBy, $this->sortDirection);
+
+        if ($this->perPage) {
+            session()->remove('perPage');
+            session()->put('perPage', $this->perPage);
+        }
 
         $products = $query->paginate($this->perPage);
 
@@ -117,5 +124,10 @@ class Products extends Component
     {
         $product = Product::withTrashed()->find($id);
         $product->forceDelete();
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['category', 'color', 'size', 'supplierId', 'sortBy', 'sortDirection', 'search', 'showDeleted']);
     }
 }

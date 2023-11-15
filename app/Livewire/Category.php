@@ -13,9 +13,13 @@ class Category extends Component
 
     #[Url (as: 'id')]
     public $id;
+    #[Url (as: 'q')]
+    public $search = "";
     public $form = [];
 
     public $url = '';
+    public $perPage = 10;
+    public $showDeleted = false;
 
 
     public function render()
@@ -23,12 +27,37 @@ class Category extends Component
         if ($this->id && !CategoryModel::withTrashed()->find($this->id)) {
             $this->id = '';
         }
-    return view('livewire.Category.index',
-        [
-            'results' => $this->id ? CategoryModel::withTrashed()->find($this->id) : CategoryModel::withTrashed()->paginate(10),
-            'fillables' => (new CategoryModel())->getFillable(),
-            'url' => current(explode('?', url()->current())),
-        ]);
+
+        if ($this->perPage) {
+            session()->remove('perPage');
+            session()->put('perPage', $this->perPage);
+        }
+
+        if ($this->showDeleted) {
+            $results = CategoryModel::onlyTrashed();
+        } else {
+            $results = CategoryModel::withoutTrashed();
+        }
+
+        $results->where(function ($query) {
+            $query->where('name', 'like', '%' . $this->search . '%');
+        })
+            ->orderBy('id', 'desc');
+
+
+        $results = $results->paginate($this->perPage);
+
+        return view('livewire.Category.index',
+            [
+                'results' => $this->id ? CategoryModel::withTrashed()->find($this->id) : $results,
+                'fillables' => (new CategoryModel())->getFillable(),
+                'url' => current(explode('?', url()->current())),
+            ]);
+    }
+
+    public function mount()
+    {
+        $this->perPage = session()->get('perPage') ?? 10;
     }
 
     public function create()
@@ -71,5 +100,10 @@ class Category extends Component
         $Category->forceDelete();
 
         return redirect()->back();
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'showDeleted']);
     }
 }
