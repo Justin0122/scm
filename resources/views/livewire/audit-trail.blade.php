@@ -1,4 +1,4 @@
-<div class="mx-4">
+<div class="">
     <div class="mb-4">
         <div class="flex row-auto gap-2">
             <select wire:model.live="selectedUser"
@@ -21,7 +21,8 @@
                     class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
                 <option value="">All Auditable Types</option>
                 @foreach ($auditableTypes as $auditableType)
-                    <option value="{{ $auditableType }}">{{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $auditableType))) }}
+                    <option
+                        value="{{ $auditableType }}">{{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $auditableType))) }}
                     </option>
                 @endforeach
             </select>
@@ -133,9 +134,20 @@
                             <div class="mr-2">
                                 {{ $key }}:
                             </div>
-                            <div class="truncate w-64">
-                                {{ $value }}
-                            </div>
+                            @if($value && strlen($value) > 5)
+                                <details class="w-36">
+                                    <summary>
+                                        {{ Str::limit($value, 5) }}
+                                    </summary>
+                                    <div class="text-xs">
+                                        {{ $value }}
+                                    </div>
+                                </details>
+                            @else
+                                <div class="w-36">
+                                    {{ $value }}
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </td>
@@ -149,9 +161,20 @@
                             <div class="mr-2">
                                 {{ $key }}:
                             </div>
-                            <div class="truncate w-64">
-                                {{ $value }}
-                            </div>
+                            @if($value && strlen($value) > 5)
+                                <details class="w-36">
+                                    <summary>
+                                        {{ Str::limit($value, 5) }}
+                                    </summary>
+                                    <div class="">
+                                        {{ $value }}
+                                    </div>
+                                </details>
+                            @else
+                                <div class="w-36">
+                                    {{ $value }}
+                                </div>
+                            @endif
                         </div>
                     @endforeach
                 </td>
@@ -160,8 +183,15 @@
                         {{ $result->ip_address }}
                     </button>
                 </td>
-                <td class="py-2 px-4">
-                    {{ $result->user_agent }}
+                <td class="py-2 px-4 w-60">
+                    <details class="text-xs">
+                        <summary>
+                            {{ Str::limit($result->user_agent, 20) }}
+                        </summary>
+                        <div class="text-xs">
+                            {{ $result->user_agent }}
+                        </div>
+                    </details>
                 </td>
                 <td class="py-2 px-4">
                     {{ $result->created_at }}
