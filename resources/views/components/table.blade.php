@@ -1,11 +1,13 @@
-@props(['results', 'type', 'create' => false])
+@props(['results', 'type', 'create' => false, 'fillables' => null])
 <div class="mx-4">
     <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
         <thead>
         <tr>
+            @if ($results->count() > 0)
             @foreach ($results->first()->getFillable() as $field)
                 <th class="px-4 py-2 text-left">{{ ucfirst($field) }}</th>
             @endforeach
+            @endif
             <th class="px-4 py-2 text-left">Created At</th>
             <th class="px-4 py-2 text-left">Updated At</th>
             <th class="px-4 py-2 text-left">Deleted At</th>
@@ -16,7 +18,7 @@
         @if ($create)
             <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
                 <form wire:submit.prevent="create">
-                    @foreach($results[0]->getFillable() as $fillable)
+                    @foreach($fillables ? $fillables : $results[0]->getFillable() as $fillable)
                         <td class="py-2 px-4">
                             <label for="{{ $results[0]->$fillable ?? $fillable }}"></label>
                             <x-input
