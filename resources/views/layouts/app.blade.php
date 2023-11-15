@@ -17,36 +17,46 @@
         <!-- Styles -->
         @livewireStyles
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.0.0/flowbite.min.js"></script>
-
     </head>
     <body class="font-sans antialiased">
-        <x-banner />
+    <x-banner />
 
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            @livewire('navigation-menu')
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="flex justify-end mx-8 pt-2 absolute right-7">
-                        @livewire('low-stock-notification')
-                    </div>
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
-
-
-            <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+    <!-- Sidebar -->
+    <div class="flex h-screen overflow-hidden">
+        <!-- Sidebar -->
+        <div class="w-64 bg-white dark:bg-gray-800 flex flex-col space-y-4 border-r border-gray-200 dark:border-gray-700 overflow-y-auto">
+            @include('navigation-menu')
         </div>
 
-        @stack('modals')
+        <!-- Content Area -->
+        <div class="flex-1 bg-gray-100 dark:bg-gray-900 overflow-y-auto">
+            <div class="min-h-screen">
+                <!-- Page Heading -->
+                @if (isset($header))
+                    <header class="bg-white dark:bg-gray-800 shadow relative">
+                        <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
+                            <div>
+                                {{ $header }}
+                            </div>
+                            <div>
+                                @livewire('low-stock-notification')
+                            </div>
+                        </div>
+                    </header>
+                @endif
 
-        @livewireScripts
+
+                <!-- Page Content -->
+                <main class="p-4">
+                    {{ $slot }}
+                </main>
+            </div>
+        </div>
+    </div>
+
+
+    @stack('modals')
+    @livewireScripts
     </body>
+
 </html>

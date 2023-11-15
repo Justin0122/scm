@@ -60,7 +60,7 @@
                             </x-secondary-button>
                         </a>
                         @if ($result->deleted_at)
-                            <x-button wire:click="restore({{ $result->id }})">
+                            <x-button wire:click="restore({{ $result->id }})" class="mr-2">
                                 Restore
                             </x-button>
                             <x-danger-button wire:click="forceDelete({{ $result->id }})" wire:confirm="Are you sure you want to force delete {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $type))) }} {{ $result->key ?? $result->name }}?">

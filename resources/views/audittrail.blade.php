@@ -6,6 +6,6 @@
     </x-slot>
 
     <div class="mx-auto py-10 sm:px-6 lg:px-8">
-        @livewire('audit-trail')
+            @livewire('audit-trail')
     </div>
 </x-app-layout>
