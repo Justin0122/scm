@@ -2,13 +2,10 @@
     @if($this->id)
         @include('livewire.crud.edit')
     @else
-        @include('livewire.crud.create')
-
         @if ($results->count())
             {{ $results->links() }}
-
             <div class="mt-4">
-                <x-table :results="$results" :type="'size'"/>
+                <x-table :results="$results" :type="'size'" :create="true" />
             </div>
         @endif
     @endif

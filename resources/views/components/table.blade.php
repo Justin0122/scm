@@ -1,3 +1,4 @@
+@props(['results', 'type', 'create' => false])
 <div class="mx-4">
     <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
         <thead>
@@ -12,6 +13,29 @@
         </tr>
         </thead>
         <tbody>
+        @if ($create)
+            <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                <form wire:submit.prevent="create">
+                    @foreach($results[0]->getFillable() as $fillable)
+                        <td class="py-2 px-4">
+                            <label for="{{ $results[0]->$fillable ?? $fillable }}"></label>
+                            <x-input
+                                type="text"
+                                class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                                wire:model="form.{{ $fillable }}"
+                            />
+                        </td>
+                    @endforeach
+
+                    <td class="py-2 px-4 grid grid-cols-2 gap-2"></td>
+                    <td class="py-2 px-4"></td>
+                    <td></td>
+                    <td class="py-2 px-4">
+                        <x-button>Add</x-button>
+                    </td>
+                </form>
+            </tr>
+        @endif
         @foreach ($results as $result)
             <tr class="{{ $loop->odd ? 'bg-gray-50 dark:bg-gray-900' : '' }}">
                 @foreach ($result->getFillable() as $field)
