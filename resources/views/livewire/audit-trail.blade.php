@@ -48,7 +48,6 @@
         {{ $results->links() }}
     </div>
     <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
-
         <thead>
         <tr>
             <th class="px-4 py-2 text-left">
@@ -109,7 +108,7 @@
             <tr class="{{ $loop->odd ? 'bg-gray-50 dark:bg-gray-900' : '' }}">
                 <td class="py-2 px-4">
                     <button wire:click="$set('selectedUser', '{{ $result->user_id }}')">
-                        {{ $result->user->name }}
+                        {{ $result->user->name ?? 'Unknown' }}
                     </button>
                 </td>
                 <td class="py-2 px-4">
@@ -126,11 +125,15 @@
                 </td>
                 <td class="py-2 px-4">
                     @foreach ($result->old_values as $key => $value)
+                        @if ($key == 'password')
+                            {{ $key }}: {{ '********' }}
+                            @continue
+                        @endif
                         <div class="flex">
                             <div class="mr-2">
                                 {{ $key }}:
                             </div>
-                            <div>
+                            <div class="truncate w-64">
                                 {{ $value }}
                             </div>
                         </div>
@@ -138,11 +141,15 @@
                 </td>
                 <td class="py-2 px-4">
                     @foreach ($result->new_values as $key => $value)
+                        @if ($key == 'password')
+                            {{ $key }}: {{ '********' }}
+                            @continue
+                        @endif
                         <div class="flex">
                             <div class="mr-2">
                                 {{ $key }}:
                             </div>
-                            <div>
+                            <div class="truncate w-64">
                                 {{ $value }}
                             </div>
                         </div>

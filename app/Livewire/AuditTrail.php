@@ -72,7 +72,6 @@ class AuditTrail extends Component
             })
             ->orderBy($this->sortField, $this->sortDirection);
 
-        //get the value of the auditable_type column, only everything after the last backslash
         $auditTypes = Audit::select('auditable_type')->distinct()->get()->map(function ($audit) {
             return substr($audit->auditable_type, strrpos($audit->auditable_type, '\\') + 1);
         });
