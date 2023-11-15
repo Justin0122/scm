@@ -28,7 +28,15 @@ class Supplier extends Component
             $this->id = '';
         }
 
-        $results = SupplierModel::withTrashed()
+        if ($this->perPage) {
+            session()->remove('perPage');
+            session()->put('perPage', $this->perPage);
+        }
+
+        if ($this->showDeleted) {
+            $results = SupplierModel::onlyTrashed();
+        }else{
+        $results = SupplierModel::withoutTrashed()
             ->where(function ($query) {
                 $query->where('name', 'like', '%' . $this->search . '%');
             })
@@ -43,8 +51,6 @@ class Supplier extends Component
             })
             ->orderBy('id', 'desc');
 
-        if ($this->showDeleted) {
-            $results->onlyTrashed();
         }
 
         $results = $results->paginate($this->perPage);
@@ -102,5 +108,10 @@ class Supplier extends Component
         $Supplier->forceDelete();
 
         return redirect()->back();
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'showDeleted']);
     }
 }

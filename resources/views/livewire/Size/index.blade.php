@@ -21,6 +21,10 @@
                 Show Deleted
             </label>
             <x-select-per-page/>
+            <x-button wire:click="clearFilters">
+
+                Clear Filters
+            </x-danger-button>
         </div>
         {{ $results->links() }}
         <div class="mt-4">

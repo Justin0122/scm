@@ -33,11 +33,15 @@ class Size extends Component
             session()->put('perPage', $this->perPage);
         }
 
-        $sizesQuery = SizeModel::withTrashed()
-            ->where(function ($query) {
-                $query->where('key', 'like', '%' . $this->search . '%');
-            })
-            ->orderBy('id', 'desc');
+        if ($this->showDeleted) {
+            $sizesQuery = SizeModel::onlyTrashed();
+        } else {
+            $sizesQuery = SizeModel::withoutTrashed()
+                ->where(function ($query) {
+                    $query->where('key', 'like', '%' . $this->search . '%');
+                })
+                ->orderBy('id', 'desc');
+        }
 
         if ($this->sort == 'integer') {
             $sizesQuery->where('key', 'REGEXP', '^[0-9]+$');
@@ -45,9 +49,6 @@ class Size extends Component
             $sizesQuery->where('key', 'REGEXP', '^[^0-9]+$');
         }
 
-        if ($this->showDeleted) {
-            $sizesQuery->onlyTrashed();
-        }
 
         $sizes = $sizesQuery
             ->whereNotIn('id', function ($query) {
@@ -111,5 +112,10 @@ class Size extends Component
         $Size->forceDelete();
 
         return redirect()->back();
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'sort', 'showDeleted']);
     }
 }

@@ -29,6 +29,11 @@ class SizeGroup extends Component
             $this->id = '';
         }
 
+        if ($this->perPage) {
+            session()->remove('perPage');
+            session()->put('perPage', $this->perPage);
+        }
+
         $sizesQuery = Size::where('key', 'like', "%{$this->searchUnassignedSizes}%");
 
         if ($this->sortUnassignedSizes == 'integer') {

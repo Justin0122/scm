@@ -22,7 +22,6 @@ class Category extends Component
     public $showDeleted = false;
 
 
-
     public function render()
     {
         if ($this->id && !CategoryModel::withTrashed()->find($this->id)) {
@@ -34,17 +33,19 @@ class Category extends Component
             session()->put('perPage', $this->perPage);
         }
 
-        $query = CategoryModel::withTrashed()
-            ->where(function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%')
-                    ->orWhere('description', 'like', '%' . $this->search . '%');
-            });
-
         if ($this->showDeleted) {
-            $query->onlyTrashed();
+            $results = CategoryModel::onlyTrashed();
+        } else {
+            $results = CategoryModel::withoutTrashed();
         }
 
-        $results = $query->paginate($this->perPage);
+        $results->where(function ($query) {
+            $query->where('name', 'like', '%' . $this->search . '%');
+        })
+            ->orderBy('id', 'desc');
+
+
+        $results = $results->paginate($this->perPage);
 
         return view('livewire.Category.index',
             [
@@ -99,5 +100,10 @@ class Category extends Component
         $Category->forceDelete();
 
         return redirect()->back();
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'showDeleted']);
     }
 }

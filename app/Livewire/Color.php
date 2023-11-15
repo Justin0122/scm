@@ -97,4 +97,9 @@ class Color extends Component
 
         return redirect()->back();
     }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'showDeleted']);
+    }
 }

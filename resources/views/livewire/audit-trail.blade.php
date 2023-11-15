@@ -34,10 +34,9 @@
             </label>
 
             <x-select-per-page />
-
-            <x-danger-button wire:click="clearFilters">
+            <x-button wire:click="clearFilters">
                 Clear Filters
-            </x-danger-button>
+            </x-button>
         </div>
     </div>
     <div class="p-4">
