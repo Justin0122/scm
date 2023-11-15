@@ -2,11 +2,9 @@
     @if($this->id)
         @include('livewire.SizeGroup.edit')
     @else
-        @if ($results->count())
-            {{ $results->links() }}
-            <div class="mt-4">
-                <x-table :results="$results" :type="'sizeGroup'" :create="true" />
-            </div>
-        @endif
+        {{ $results->links() }}
+        <div class="mt-4">
+            <x-table :results="$results" :type="'sizeGroup'" :create="true" :fillables="$fillables"/>
+        </div>
     @endif
 </div>
