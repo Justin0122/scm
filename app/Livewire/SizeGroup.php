@@ -101,12 +101,19 @@ class SizeGroup extends Component
 
     public function createAndAssignSize()
     {
-        //get form.size.key and create the size and assign it to the size group
         $size = new Size();
         $size->key = $this->form['size']['key'];
         $size->save();
 
         $sizeGroup = SizeGroupModel::find($this->id);
         $sizeGroup->sizes()->attach($size);
+    }
+
+    public function forceDelete($id)
+    {
+        $SizeGroup = SizeGroupModel::withTrashed()->find($id);
+        $SizeGroup->forceDelete();
+
+        return redirect()->back();
     }
 }

@@ -56,4 +56,20 @@ class Supplier extends Component
 
         return redirect()->back();
     }
+
+    public function restore($id)
+    {
+        $Supplier = SupplierModel::withTrashed()->find($id);
+        $Supplier->restore();
+
+        return redirect()->back();
+    }
+
+    public function forceDelete($id)
+    {
+        $Supplier = SupplierModel::withTrashed()->find($id);
+        $Supplier->forceDelete();
+
+        return redirect()->back();
+    }
 }

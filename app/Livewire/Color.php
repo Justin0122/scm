@@ -64,4 +64,12 @@ class Color extends Component
 
         return redirect()->back();
     }
+
+    public function forceDelete($id)
+    {
+        $Color = ColorModel::withTrashed()->find($id);
+        $Color->forceDelete();
+
+        return redirect()->back();
+    }
 }
