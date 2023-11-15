@@ -1,4 +1,4 @@
-<div class="container px-4 pt-10 mx-auto sm:px-6 lg:px-8 dark:text-gray-200">
+<div class="mx-4">
     <div class="mb-4">
         <div class="flex row-auto gap-2">
             <select wire:model.live="selectedUser"
