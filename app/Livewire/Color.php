@@ -13,22 +13,47 @@ class Color extends Component
 
     #[Url (as: 'id')]
     public $id;
+    #[Url (as: 'q')]
+    public $search = "";
     public $form = [];
 
     public $url = '';
-
+    public $perPage = 10;
+    public $showDeleted = false;
 
     public function render()
     {
         if ($this->id && !ColorModel::withTrashed()->find($this->id)) {
             $this->id = '';
         }
-    return view('livewire.Color.index',
-        [
-            'results' => $this->id ? ColorModel::withTrashed()->find($this->id) : ColorModel::withTrashed()->paginate(10),
-            'fillables' => (new ColorModel())->getFillable(),
-            'url' => current(explode('?', url()->current())),
-        ]);
+
+        if ($this->perPage) {
+            session()->remove('perPage');
+            session()->put('perPage', $this->perPage);
+        }
+
+        $query = ColorModel::withTrashed()
+            ->where(function ($query) {
+                $query->where('key', 'like', '%' . $this->search . '%');
+            });
+
+        if ($this->showDeleted) {
+            $query->onlyTrashed();
+        }
+
+        $results = $query->paginate($this->perPage);
+
+        return view('livewire.Color.index',
+            [
+                'results' => $this->id ? ColorModel::withTrashed()->find($this->id) : $results,
+                'fillables' => (new ColorModel())->getFillable(),
+                'url' => current(explode('?', url()->current())),
+            ]);
+    }
+
+    public function mount()
+    {
+        $this->perPage = session()->get('perPage') ?? 10;
     }
 
     public function create()

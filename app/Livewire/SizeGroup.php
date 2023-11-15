@@ -14,11 +14,14 @@ class SizeGroup extends Component
 
     #[Url (as: 'id')]
     public $id;
+    #[Url (as: 'q')]
+    public $search = "";
     public $form = [];
 
     public $url = '';
     public $searchUnassignedSizes = '';
     public $sortUnassignedSizes = 'all'; // Default to show all sizes
+    public $perPage = 10;
 
     public function render()
     {
@@ -43,11 +46,16 @@ class SizeGroup extends Component
             ->get();
 
         return view('livewire.SizeGroup.index', [
-            'results' => $this->id ? SizeGroupModel::with('sizes')->find($this->id) : SizeGroupModel::with('sizes')->paginate(10),
+            'results' => $this->id ? SizeGroupModel::with('sizes')->find($this->id) : SizeGroupModel::with('sizes')->where('name', 'like', '%' . $this->search . '%')->orderBy('id', 'desc')->paginate($this->perPage),
             'fillables' => (new SizeGroupModel())->getFillable(),
             'url' => current(explode('?', url()->current())),
             'sizes' => $sizes,
         ]);
+    }
+
+    public function mount()
+    {
+        $this->perPage = session()->get('perPage') ?? 10;
     }
 
 

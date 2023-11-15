@@ -22,7 +22,7 @@
                             <x-input
                                 type="text"
                                 class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-                                wire:model="form.{{ $fillable }}"
+                                wire:model.live="form.{{ $fillable }}"
                             />
                         </td>
                     @endforeach

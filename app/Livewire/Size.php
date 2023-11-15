@@ -13,21 +13,62 @@ class Size extends Component
 
     #[Url (as: 'id')]
     public $id;
+    #[Url (as: 'q')]
+    public $search = "";
     public $form = [];
 
     public $url = '';
+    public $perPage = 10;
+    public $sort = 'all';
+    public $showDeleted = false;
 
     public function render()
     {
         if ($this->id && !SizeModel::withTrashed()->find($this->id)) {
             $this->id = '';
         }
+
+        if ($this->perPage) {
+            session()->remove('perPage');
+            session()->put('perPage', $this->perPage);
+        }
+
+        $sizesQuery = SizeModel::withTrashed()
+            ->where(function ($query) {
+                $query->where('key', 'like', '%' . $this->search . '%');
+            })
+            ->orderBy('id', 'desc');
+
+        if ($this->sort == 'integer') {
+            $sizesQuery->where('key', 'REGEXP', '^[0-9]+$');
+        } elseif ($this->sort == 'string') {
+            $sizesQuery->where('key', 'REGEXP', '^[^0-9]+$');
+        }
+
+        if ($this->showDeleted) {
+            $sizesQuery->onlyTrashed();
+        }
+
+        $sizes = $sizesQuery
+            ->whereNotIn('id', function ($query) {
+                $query->select('size_id')
+                    ->from('size_group_sizes')
+                    ->where('size_group_id', $this->id);
+            })
+            ->paginate($this->perPage);
+
+
     return view('livewire.Size.index',
         [
-            'results' => $this->id ? SizeModel::withTrashed()->find($this->id) : SizeModel::withTrashed()->paginate(10),
+            'results' => $this->id ? SizeModel::withTrashed()->find($this->id) : $sizes,
             'fillables' => (new SizeModel())->getFillable(),
             'url' => current(explode('?', url()->current())),
         ]);
+    }
+
+    public function mount()
+    {
+        $this->perPage = session()->get('perPage') ?? 10;
     }
 
     public function create()
