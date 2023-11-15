@@ -3,11 +3,9 @@
     <table class="table-auto w-full divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-800 dark:text-gray-200">
         <thead>
         <tr>
-            @if ($results->count() > 0)
-            @foreach ($results->first()->getFillable() as $field)
-                <th class="px-4 py-2 text-left">{{ ucfirst($field) }}</th>
+            @foreach($fillables ? $fillables : $results[0]->getFillable() as $fillable)
+                <th class="px-4 py-2 text-left">{{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $fillable))) }}</th>
             @endforeach
-            @endif
             <th class="px-4 py-2 text-left">Created At</th>
             <th class="px-4 py-2 text-left">Updated At</th>
             <th class="px-4 py-2 text-left">Deleted At</th>
