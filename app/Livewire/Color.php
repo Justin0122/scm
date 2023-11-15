@@ -32,16 +32,19 @@ class Color extends Component
             session()->put('perPage', $this->perPage);
         }
 
-        $query = ColorModel::withTrashed()
-            ->where(function ($query) {
-                $query->where('key', 'like', '%' . $this->search . '%');
-            });
-
         if ($this->showDeleted) {
-            $query->onlyTrashed();
+            $results = ColorModel::onlyTrashed();
+        } else {
+            $results = ColorModel::withoutTrashed();
         }
 
-        $results = $query->paginate($this->perPage);
+
+        $results->where(function ($query) {
+            $query->where('key', 'like', '%' . $this->search . '%');
+        });
+
+
+        $results = $results->paginate($this->perPage);
 
         return view('livewire.Color.index',
             [
