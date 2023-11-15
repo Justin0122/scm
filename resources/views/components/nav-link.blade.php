@@ -7,6 +7,6 @@
 @endphp
 
 
-<a {{ $attributes->merge(['class' => $classes]) }}>
+<a wire:navigate.hover {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
 </a>

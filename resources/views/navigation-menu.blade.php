@@ -85,7 +85,7 @@
                     @endphp
                     <x-nav-link href="{{ route('crud', ['type' => $page]) }}"
                                 :active="request()->routeIs('crud') && $currentPage == $page">
-                        {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $page))) }}
+                        {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $page))) }}s
                     </x-nav-link>
                 @endforeach
                 <x-link-border/>
