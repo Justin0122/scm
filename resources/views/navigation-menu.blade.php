@@ -79,8 +79,12 @@
                 <x-section-title :title="__('Crud')" :description="__('Manage your data.')" :class="'mx-4'"/>
                 @php $pages = ['supplier', 'color', 'size', 'sizeGroup']; @endphp
                 @foreach ($pages as $page)
+                    @php
+                        $url = URL::route('crud', ['type' => $page]);
+                        $currentPage = request('type');
+                    @endphp
                     <x-nav-link href="{{ route('crud', ['type' => $page]) }}"
-                                :active="request()->routeIs('crud') && request()->query('page') === $page">
+                                :active="request()->routeIs('crud') && $currentPage == $page">
                         {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', $page))) }}
                     </x-nav-link>
                 @endforeach
