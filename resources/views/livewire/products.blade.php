@@ -1,10 +1,49 @@
 <div class="mx-4">
     <div class="mb-4">
-        <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-400" for="search">
-            <input wire:model.live="search" type="text"
-                   class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-                   placeholder="Search products...">
-        </label>
+        <div class="flex row-auto gap-2">
+                <select wire:model.live="sortBy"
+                        class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                    <option value="name">Name</option>
+                    <option value="created_at">Created At</option>
+                    <option value="updated_at">Updated At</option>
+                    <option value="deleted_at">Deleted At</option>
+                </select>
+
+                <select wire:model.live="sortDirection"
+                        class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                    <option value="asc">Ascending</option>
+                    <option value="desc">Descending</option>
+                </select>
+                <select wire:model.live="category"
+                        class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                    <option value="">All Categories</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            <label class="w-full block text-sm font-medium text-gray-900 dark:text-gray-400"
+                   for="search">
+                <input wire:model.live="search" type="text"
+                       class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                       placeholder="Search values...">
+            </label>
+            <label class="block text-sm font-medium text-gray-900 dark:text-gray-400 flex items-center">
+                <input wire:model.live="showDeleted" type="checkbox"
+                       class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 mr-2">
+                Show Deleted
+            </label>
+
+            <select wire:model.live="perPage"
+                    class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
+                @foreach ([10, 20, 50, 100] as $value)
+                    <option value="{{ $value }}">{{ $value }} per page</option>
+                @endforeach
+            </select>
+
+            <x-danger-button wire:click="clearFilters">
+                Clear Filters
+            </x-danger-button>
+        </div>
     </div>
     <div class="mt-4">
         {{ $products->links() }}
@@ -14,51 +53,12 @@
         <tr>
             <th class="px-4 py-2">Name</th>
             <th class="px-4 py-2">
-                <label class="block">
-                    <select wire:model.live="category"
-                            class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                        <option value="">All Categories</option>
-                        @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                </label>
+                Categories
             </th>
             <th class="px-4 py-2">Supplier</th>
             <th class="px-4 py-2">Specs</th>
             <th class="px-4 py-2">Stock</th>
-            <th class="px-4 py-2 grid grid-cols-2">
-                <label class="block">
-                    <select wire:model.live="sortBy"
-                            class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                        <option value="name">Name</option>
-                        <option value="created_at">Created At</option>
-                        <option value="updated_at">Updated At</option>
-                        <option value="deleted_at">Deleted At</option>
-                    </select>
-                </label>
-
-                <label class="block">
-                    <select wire:model.live="sortDirection"
-                            class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                        <option value="asc">Ascending</option>
-                        <option value="desc">Descending</option>
-                    </select>
-                </label>
-                <label class="block">
-                    <select wire:model.live="perPage"
-                            class="w-full rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200">
-                        @foreach ([10, 20, 50, 100] as $value)
-                            <option value="{{ $value }}">{{ $value }} per page</option>
-                        @endforeach
-                    </select>
-                </label>
-                <label class="block">
-                    <input wire:model.live="showDeleted" type="checkbox"
-                           class="rounded border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 mr-2">
-                    Show Deleted
-                </label>
-            </th>
+            <th class="px-4 py-2">Created At</th>
             <th class="px-4 py-2">Actions</th>
 
         </tr>
@@ -81,18 +81,12 @@
                         </select>
                     </label>
                 </td>
-                <td class="py-2 px-4">
-
-                </td>
-                <td class="py-2 px-4 grid grid-cols-2 gap-2">
-
-                </td>
-                <td class="py-2 px-4">
-
-                </td>
+                <td class="py-2 px-4"></td>
+                <td class="py-2 px-4 grid grid-cols-2 gap-2"></td>
+                <td class="py-2 px-4"></td>
                 <td></td>
                 <td class="py-2 px-4">
-                    <x-button>Save</x-button>
+                    <x-button>Add</x-button>
                 </td>
             </form>
         </tr>
@@ -152,7 +146,7 @@
                 </td>
 
                 <td class="py-2 text-end px-4">
-                    Created: {{ $product->created_at->format('d/m/Y')}} {{$product->created_at->diffForHumans() }}
+                    {{ $product->created_at->format('d/m/Y')}} - {{$product->created_at->diffForHumans() }}
                 </td>
                 <td class="py-2 px-4">
                     <div class="flex justify-end">
