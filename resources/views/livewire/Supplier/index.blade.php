@@ -22,7 +22,7 @@
         </div>
         {{ $results->links() }}
         <div class="mt-4">
-            <x-table :results="$results" :type="'size'" :create="true" :fillables="$fillables"/>
+            <x-table :results="$results" :type="'supplier'" :create="true" :fillables="$fillables"/>
         </div>
     @endif
 </div>
