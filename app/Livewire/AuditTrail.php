@@ -14,9 +14,7 @@ class AuditTrail extends Component
     public $sortDirection = 'desc';
     public $eventFilter = '';
     public $userFilter = '';
-    public $ipAddressFilter = '';
     public $auditableTypeFilter = '';
-
     public $selectedEvent = '';
     public $selectedUser = '';
 
@@ -40,7 +38,6 @@ class AuditTrail extends Component
                     $term = strtolower($term);
                     $query->where(function ($query) use ($term) {
                         $query->whereRaw('LOWER(event) LIKE ?', ['%' . $term . '%'])
-                            ->orWhereRaw('LOWER(ip_address) LIKE ?', ['%' . $term . '%'])
                             ->orWhereRaw('LOWER(auditable_type) LIKE ?', ['%' . $term . '%'])
                             ->orWhereRaw('LOWER(old_values) LIKE ?', ['%' . $term . '%'])
                             ->orWhereRaw('LOWER(new_values) LIKE ?', ['%' . $term . '%'])
@@ -65,9 +62,6 @@ class AuditTrail extends Component
             })
             ->when($this->userFilter, function ($query) {
                 $query->where('user_id', $this->userFilter);
-            })
-            ->when($this->ipAddressFilter, function ($query) {
-                $query->where('ip_address', 'like', '%' . $this->ipAddressFilter . '%');
             })
             ->when($this->auditableTypeFilter, function ($query) {
                 $query->where('auditable_type', 'like', '%' . $this->auditableTypeFilter . '%');

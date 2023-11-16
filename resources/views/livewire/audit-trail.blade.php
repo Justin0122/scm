@@ -69,13 +69,6 @@
             <th class="px-4 py-2 text-left">Old Values</th>
             <th class="px-4 py-2 text-left">New Values</th>
             <th class="px-4 py-2 text-left">
-                <button wire:click="sort('ip_address')">
-                    IP Address
-                    @if ($sortField === 'ip_address')
-                        <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                    @endif</button>
-            </th>
-            <th class="px-4 py-2 text-left">
                 <button wire:click="sort('created_at')">
                     Created At
                     @if ($sortField === 'created_at')
@@ -170,11 +163,6 @@
                                 @endif
                         </div>
                     @endforeach
-                </td>
-                <td class="py-2 px-4">
-                    <button wire:click="$set('ipAddressFilter', '{{ $result->ip_address }}')">
-                        {{ $result->ip_address }}
-                    </button>
                 </td>
                 <td class="py-2 px-4">
                     {{ $result->created_at }}
