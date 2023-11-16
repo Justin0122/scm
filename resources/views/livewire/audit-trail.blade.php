@@ -33,7 +33,7 @@
                        placeholder="Search values...">
             </label>
 
-            <x-select-per-page />
+            <x-select-per-page/>
             <x-button wire:click="clearFilters">
                 Clear Filters
             </x-button>
@@ -66,26 +66,12 @@
                         <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
                     @endif</button>
             </th>
-            <th class="px-4 py-2 text-left">
-                <button wire:click="sort('auditable_id')">
-                    Auditable ID
-                    @if ($sortField === 'auditable_id')
-                        <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                    @endif</button>
-            </th>
             <th class="px-4 py-2 text-left">Old Values</th>
             <th class="px-4 py-2 text-left">New Values</th>
             <th class="px-4 py-2 text-left">
                 <button wire:click="sort('ip_address')">
                     IP Address
                     @if ($sortField === 'ip_address')
-                        <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
-                    @endif</button>
-            </th>
-            <th class="px-4 py-2 text-left">
-                <button wire:click="sort('user_agent')">
-                    User Agent
-                    @if ($sortField === 'user_agent')
                         <span class="ml-1">{{ $sortDirection === 'asc' ? '▲' : '▼' }}</span>
                     @endif</button>
             </th>
@@ -102,21 +88,31 @@
         @foreach ($results as $result)
             <tr class="{{ $loop->odd ? 'bg-gray-50 dark:bg-gray-900' : '' }}">
                 <td class="py-2 px-4">
-                    <button wire:click="$set('selectedUser', '{{ $result->user_id }}')">
+                    <button wire:click="$set('selectedUser', '{{ $result->user_id }}')"
+                            class="flex items-center gap-2 hover:text-blue-500">
+                        <img class="h-8 w-8 rounded-full object-cover"
+                             src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}"/>
                         {{ $result->user->name ?? 'Unknown' }}
                     </button>
                 </td>
                 <td class="py-2 px-4">
                     <button wire:click="$set('selectedEvent', '{{ $result->event }}')">
-                        {{ $result->event }}
+                        @if ($result->event == 'deleted')
+                            <x-badge type="danger" :text="$result->event"/>
+                        @elseif ($result->event == 'restored')
+                            <x-badge type="info" :text="$result->event"/>
+                        @elseif ($result->event == 'updated')
+                            <x-badge type="warning" :text="$result->event"/>
+                        @else
+                            <x-badge type="success" :text="$result->event"/>
+                        @endif
                     </button>
                 </td>
                 <td class="py-2 px-4">
-                    {{ ucwords(join(' ', preg_split('/(?=[A-Z])/', Str::after($result->auditable_type, 'App\Models\\')))) }}
-
-                </td>
-                <td class="py-2 px-4">
-                    {{ $result->auditable_id }}
+                    @php $auditableType = ucwords(join('', preg_split('/(?=[A-Z])/', Str::after($result->auditable_type, 'App\Models\\')))); @endphp
+                    <button wire:click="$set('selectedAuditableType', '{{  $auditableType }}')">
+                        <x-badge type="light" :text="$auditableType"/>
+                    </button>
                 </td>
                 <td class="py-2 px-4">
                     @foreach ($result->old_values as $key => $value)
@@ -128,20 +124,22 @@
                             <div class="mr-2">
                                 {{ $key }}:
                             </div>
-                            @if($value && strlen($value) > 5)
-                                <details class="w-36">
-                                    <summary>
-                                        {{ Str::limit($value, 5) }}
-                                    </summary>
-                                    <div class="text-xs">
+                            <div wire:click="$set('search', '{{ $value }}')" class="cursor-pointer {{ strtolower($search) == strtolower($value) ? 'text-yellow-200' : '' }}">
+                                @if($value && strlen($value) > 5)
+                                    <details class="w-36">
+                                        <summary>
+                                            {{ Str::limit($value, 5) }}
+                                        </summary>
+                                        <div class="text-xs">
+                                            {{ $value }}
+                                        </div>
+                                    </details>
+                                @else
+                                    <div class="w-36">
                                         {{ $value }}
                                     </div>
-                                </details>
-                            @else
-                                <div class="w-36">
-                                    {{ $value }}
-                                </div>
-                            @endif
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </td>
@@ -155,20 +153,21 @@
                             <div class="mr-2">
                                 {{ $key }}:
                             </div>
-                            @if($value && strlen($value) > 5)
-                                <details class="w-36">
-                                    <summary>
-                                        {{ Str::limit($value, 5) }}
-                                    </summary>
-                                    <div class="">
+                            <div wire:click="$set('search', '{{ $value }}')" class="cursor-pointer {{ strtolower($search) == strtolower($value) ? 'text-yellow-200' : '' }}">
+                                @if($value && strlen($value) > 5)
+                                    <details class="w-36">
+                                        <summary>
+                                            {{ Str::limit($value, 5) }}
+                                        </summary>
+                                        <div class="text-xs">
+                                            {{ $value }}
+                                        </div>
+                                    </details>
+                                @else
+                                    <div class="w-36">
                                         {{ $value }}
                                     </div>
-                                </details>
-                            @else
-                                <div class="w-36">
-                                    {{ $value }}
-                                </div>
-                            @endif
+                                @endif
                         </div>
                     @endforeach
                 </td>
@@ -176,16 +175,6 @@
                     <button wire:click="$set('ipAddressFilter', '{{ $result->ip_address }}')">
                         {{ $result->ip_address }}
                     </button>
-                </td>
-                <td class="py-2 px-4 w-60">
-                    <details class="text-xs">
-                        <summary>
-                            {{ Str::limit($result->user_agent, 20) }}
-                        </summary>
-                        <div class="text-xs">
-                            {{ $result->user_agent }}
-                        </div>
-                    </details>
                 </td>
                 <td class="py-2 px-4">
                     {{ $result->created_at }}
