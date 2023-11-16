@@ -35,6 +35,7 @@ class AuditTrail extends Component
 
         $query = Audit::with('user')
 
+
             ->where(function ($query) use ($searchTerms) {
                 foreach ($searchTerms as $term) {
                     $query->where(function ($query) use ($term) {
