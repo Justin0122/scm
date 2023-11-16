@@ -35,21 +35,22 @@ class AuditTrail extends Component
 
         $query = Audit::with('user')
 
-
             ->where(function ($query) use ($searchTerms) {
                 foreach ($searchTerms as $term) {
+                    $term = strtolower($term);
                     $query->where(function ($query) use ($term) {
-                        $query->where('event', 'like', '%' . $term . '%')
-                            ->orWhere('ip_address', 'like', '%' . $term . '%')
-                            ->orWhere('auditable_type', 'like', '%' . $term . '%')
-                            ->orWhere('old_values', 'like', '%' . $term . '%')
-                            ->orWhere('new_values', 'like', '%' . $term . '%')
+                        $query->whereRaw('LOWER(event) LIKE ?', ['%' . $term . '%'])
+                            ->orWhereRaw('LOWER(ip_address) LIKE ?', ['%' . $term . '%'])
+                            ->orWhereRaw('LOWER(auditable_type) LIKE ?', ['%' . $term . '%'])
+                            ->orWhereRaw('LOWER(old_values) LIKE ?', ['%' . $term . '%'])
+                            ->orWhereRaw('LOWER(new_values) LIKE ?', ['%' . $term . '%'])
                             ->orWhereHas('user', function ($query) use ($term) {
-                                $query->where('name', 'like', '%' . $term . '%');
+                                $query->whereRaw('LOWER(name) LIKE ?', ['%' . $term . '%']);
                             });
                     });
                 }
             })
+
             ->when($this->selectedAuditableType, function ($query) {
                 $query->where('auditable_type', 'like', '%' . $this->selectedAuditableType . '%');
             })
