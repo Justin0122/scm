@@ -23,23 +23,24 @@
                      wire:confirm="Are you sure you want to delete this size group?">
         Delete
     </x-danger-button>
-    <x-section-border />
+    <x-section-border/>
 
     <p class="text-sm font-semibold text-gray-600">
         Create and assign a size
     </p>
     @include('livewire.Size.create')
-<x-section-border />
+    <x-section-border/>
     <div class="mb-4">
         <label class="text-sm font-semibold text-gray-600">Filter Unassigned Sizes:</label>
-        <select wire:model.live="sortUnnasignedSizes" class="py-2 px-3 border rounded-lg focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-700">
+        <select wire:model.live="sortUnassignedSizes"
+                class="py-2 px-3 border rounded-lg focus:outline-none focus:ring focus:border-blue-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-700">
             <option value="all">All Sizes</option>
             <option value="integer">Integer Sizes Only</option>
             <option value="string">String Sizes Only</option>
         </select>
     </div>
 
-@if ($results->sizes->count() == 0)
+    @if ($results->sizes->count() == 0)
         <p class="text-sm font-semibold text-gray-600">
             No sizes assigned to this group
         </p>

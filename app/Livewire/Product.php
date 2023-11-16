@@ -51,6 +51,12 @@ class Product extends Component
         $sizes = \App\Models\Size::whereIn('id', $sizeIds)->get(['id', 'key']);
         $suppliers = \App\Models\Supplier::whereIn('id', $supplierIds)->get(['id', 'name']);
 
+        if(isset($this->form['size_group']) && $this->form['size_group'] != null){
+            $sizeFromSelectedGroup = \App\Models\SizeGroup::find($this->form['size_group'])->sizes()->get();
+        }else{
+            $sizeFromSelectedGroup = [];
+        }
+
         return view('livewire.product', [
             'productSpecifications' => $productSpecifications2,
             'product' => $product,
@@ -58,22 +64,30 @@ class Product extends Component
             'filter_colors' => $colors,
             'filter_suppliers' => $suppliers,
             'sizeGroups' => \App\Models\SizeGroup::all(),
-            'sizes' => $sizes,
-            'colors' => $colors,
-            'suppliers' => $suppliers,
+            'sizes' => \App\Models\Size::all(),
+            'colors' => \App\Models\Color::all(),
+            'suppliers' => \App\Models\Supplier::all(),
+            'sizeFromSelectedGroup' => $sizeFromSelectedGroup,
         ]);
     }
     public function create()
     {
         $product = ProductModel::withTrashed()->find($this->productId);
         $sizeIds = \App\Models\SizeGroup::find($this->form['size_group'])->sizes()->pluck('sizes.id')->toArray();
-        foreach ($sizeIds as $sizeId) {
-            $product->productSpecifications()->create([
-                'size_id' => $sizeId,
-                'color_id' => $this->form['color'],
-                'supplier_id' => $this->form['supplier'],
-                'stock' => $this->form['stock'],
-            ]);
+        $colorIds = \App\Models\Color::find($this->form['color'])->pluck('id')->toArray();
+        $supplierIds = \App\Models\Supplier::find($this->form['supplier'])->pluck('id')->toArray();
+
+        foreach($supplierIds as $supplierId){
+            foreach ($sizeIds as $sizeId) {
+                foreach ($colorIds as $colorId) {
+                    $product->productSpecifications()->create([
+                        'color_id' => $colorId,
+                        'size_id' => $sizeId,
+                        'stock' => 0,
+                        'supplier_id' => $supplierId,
+                    ]);
+                }
+            }
         }
     }
 

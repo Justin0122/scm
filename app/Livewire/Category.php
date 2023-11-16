@@ -5,9 +5,9 @@ namespace App\Livewire;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Color as ColorModel;
+use App\Models\Category as CategoryModel;
 
-class Color extends Component
+class Category extends Component
 {
     use WithPagination;
 
@@ -21,9 +21,10 @@ class Color extends Component
     public $perPage = 10;
     public $showDeleted = false;
 
+
     public function render()
     {
-        if ($this->id && !ColorModel::withTrashed()->find($this->id)) {
+        if ($this->id && !CategoryModel::withTrashed()->find($this->id)) {
             $this->id = '';
         }
 
@@ -33,23 +34,23 @@ class Color extends Component
         }
 
         if ($this->showDeleted) {
-            $results = ColorModel::onlyTrashed();
+            $results = CategoryModel::onlyTrashed();
         } else {
-            $results = ColorModel::withoutTrashed();
+            $results = CategoryModel::withoutTrashed();
         }
 
-
         $results->where(function ($query) {
-            $query->where('key', 'like', '%' . $this->search . '%');
-        });
+            $query->where('name', 'like', '%' . $this->search . '%');
+        })
+            ->orderBy('id', 'desc');
 
 
         $results = $results->paginate($this->perPage);
 
-        return view('livewire.Color.index',
+        return view('livewire.Category.index',
             [
-                'results' => $this->id ? ColorModel::withTrashed()->find($this->id) : $results,
-                'fillables' => (new ColorModel())->getFillable(),
+                'results' => $this->id ? CategoryModel::withTrashed()->find($this->id) : $results,
+                'fillables' => (new CategoryModel())->getFillable(),
                 'url' => current(explode('?', url()->current())),
             ]);
     }
@@ -61,42 +62,42 @@ class Color extends Component
 
     public function create()
     {
-        $Color = new ColorModel();
+        $Category = new CategoryModel();
         foreach ($this->form as $key => $value) {
-            $Color->$key = $value;
+            $Category->$key = $value;
         }
-        $Color->save();
+        $Category->save();
     }
 
     public function update()
     {
-        $Color = ColorModel::withTrashed()->find($this->id);
+        $Category = CategoryModel::withTrashed()->find($this->id);
         foreach ($this->form as $key => $value) {
-            $Color->$key = $value;
+            $Category->$key = $value;
         }
-        $Color->save();
+        $Category->save();
     }
 
     public function delete($id)
     {
-        $Color = ColorModel::find($id);
-        $Color->delete();
+        $Category = CategoryModel::find($id);
+        $Category->delete();
 
         return redirect()->back();
     }
 
     public function restore($id)
     {
-        $Color = ColorModel::withTrashed()->find($id);
-        $Color->restore();
+        $Category = CategoryModel::withTrashed()->find($id);
+        $Category->restore();
 
         return redirect()->back();
     }
 
     public function forceDelete($id)
     {
-        $Color = ColorModel::withTrashed()->find($id);
-        $Color->forceDelete();
+        $Category = CategoryModel::withTrashed()->find($id);
+        $Category->forceDelete();
 
         return redirect()->back();
     }

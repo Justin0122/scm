@@ -39,14 +39,19 @@
                 @if($lowStockProducts->isNotEmpty())
                     <div class="alert alert-warning">
                         <ul>
-                            @foreach($lowStockProducts as $specification)
+                            @php
+                                $uniqueProducts = $lowStockProducts->groupBy('product_id');
+                            @endphp
+
+                            @foreach($uniqueProducts as $productId => $specifications)
                                 <li class="text-gray-700 dark:text-gray-200">
-                                    <a href="{{ route('product', $specification->product) }}" class="hover:text-teal-500 transition duration-300 ease-in-out" wire:navigate.hover>
-                                        {{ $specification->product->name }} - Stock: {{ $specification->stock }}
+                                    <a href="{{ route('product', $specifications[0]->product) }}" class="hover:text-teal-500 transition duration-300 ease-in-out" wire:navigate.hover>
+                                        {{ $specifications[0]->product->name }} ({{ $specifications->count() }})
                                     </a>
                                 </li>
                             @endforeach
                         </ul>
+
                     </div>
                 @endif
 

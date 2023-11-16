@@ -26,6 +26,10 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+    Route::get('/products', function () {
+        return view('products');
+    })->name('products');
+
     Route::get('/product/{productId}', function ($productId) {
         return view('product', compact('productId'));
     })->name('product');
@@ -33,4 +37,12 @@ Route::middleware([
     Route::get('/crud', function () {
         return view('crud');
     })->name('crud');
+
+    Route::get('/audit-trail', function () {
+        return view('audittrail');
+    })->name('audit-trail');
+});
+
+Route::get('/register', function () {
+    return view('welcome');
 });
