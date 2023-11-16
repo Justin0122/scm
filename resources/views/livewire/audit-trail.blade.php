@@ -118,20 +118,7 @@
                                 {{ $key }}:
                             </div>
                             <div wire:click="$set('search', '{{ $value }}')" class="cursor-pointer {{ strtolower($search) == strtolower($value) ? 'text-yellow-200' : '' }}">
-                                @if($value && strlen($value) > 5)
-                                    <details class="w-36">
-                                        <summary>
-                                            {{ Str::limit($value, 5) }}
-                                        </summary>
-                                        <div class="text-xs">
-                                            {{ $value }}
-                                        </div>
-                                    </details>
-                                @else
-                                    <div class="w-36">
-                                        {{ $value }}
-                                    </div>
-                                @endif
+                                {{ $value }}
                             </div>
                         </div>
                     @endforeach
@@ -147,20 +134,8 @@
                                 {{ $key }}:
                             </div>
                             <div wire:click="$set('search', '{{ $value }}')" class="cursor-pointer {{ strtolower($search) == strtolower($value) ? 'text-yellow-200' : '' }}">
-                                @if($value && strlen($value) > 5)
-                                    <details class="w-36">
-                                        <summary>
-                                            {{ Str::limit($value, 5) }}
-                                        </summary>
-                                        <div class="text-xs">
-                                            {{ $value }}
-                                        </div>
-                                    </details>
-                                @else
-                                    <div class="w-36">
-                                        {{ $value }}
-                                    </div>
-                                @endif
+                                {{ $value }}
+                            </div>
                         </div>
                     @endforeach
                 </td>

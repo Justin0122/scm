@@ -37,13 +37,8 @@ class AuditTrail extends Component
                 foreach ($searchTerms as $term) {
                     $term = strtolower($term);
                     $query->where(function ($query) use ($term) {
-                        $query->whereRaw('LOWER(event) LIKE ?', ['%' . $term . '%'])
-                            ->orWhereRaw('LOWER(auditable_type) LIKE ?', ['%' . $term . '%'])
-                            ->orWhereRaw('LOWER(old_values) LIKE ?', ['%' . $term . '%'])
-                            ->orWhereRaw('LOWER(new_values) LIKE ?', ['%' . $term . '%'])
-                            ->orWhereHas('user', function ($query) use ($term) {
-                                $query->whereRaw('LOWER(name) LIKE ?', ['%' . $term . '%']);
-                            });
+                        $query->whereRaw('LOWER(old_values) LIKE ?', ['%' . $term . '%'])
+                            ->orWhereRaw('LOWER(new_values) LIKE ?', ['%' . $term . '%']);
                     });
                 }
             })
@@ -97,6 +92,6 @@ class AuditTrail extends Component
 
     public function clearFilters()
     {
-        $this->reset(['eventFilter', 'userFilter', 'ipAddressFilter', 'auditableTypeFilter', 'selectedEvent', 'selectedUser', 'selectedAuditableType']);
+        $this->reset(['eventFilter', 'userFilter', 'auditableTypeFilter', 'selectedEvent', 'selectedUser', 'selectedAuditableType']);
     }
 }
