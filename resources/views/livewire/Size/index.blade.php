@@ -24,7 +24,7 @@
             <x-button wire:click="clearFilters">
 
                 Clear Filters
-            </x-danger-button>
+            </x-button>
         </div>
         {{ $results->links() }}
         <div class="mt-4">
