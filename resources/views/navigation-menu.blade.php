@@ -93,6 +93,14 @@
                 <x-nav-link href="{{ route('audit-trail') }}" :active="request()->routeIs('audit-trail')">
                     {{ __('Audit Trail') }}
                 </x-nav-link>
+
+                @can('seeTelescope')
+                    <x-link-border/>
+                    <x-section-title :title="__('Telescope')" :description="__('View all database changes.')" :class="'mx-4'"/>
+                    <x-nav-link href="{{ route('telescope') }}" :active="request()->routeIs('telescope')">
+                        {{ __('Telescope') }}
+                    </x-nav-link>
+                @endcan
             </div>
 
         </div>
