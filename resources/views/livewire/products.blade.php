@@ -38,7 +38,7 @@
             <x-button wire:click="clearFilters">
 
                 Clear Filters
-            </x-danger-button>
+            </x-button>
         </div>
     </div>
     <div class="mt-4">
