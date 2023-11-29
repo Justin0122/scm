@@ -2,13 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Interfaces\CrudComponent;
 use App\Models\Category;
 use App\Models\Product;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class Products extends Component
+class Products extends Component implements CrudComponent
 {
 
     use WithPagination;

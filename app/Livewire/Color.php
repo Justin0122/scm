@@ -2,12 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Interfaces\CrudComponent;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Color as ColorModel;
 
-class Color extends Component
+class Color extends Component implements CrudComponent
 {
     use WithPagination;
 

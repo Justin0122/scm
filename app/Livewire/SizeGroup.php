@@ -2,13 +2,17 @@
 
 namespace App\Livewire;
 
+use App\Interfaces\CrudComponent;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\SizeGroup as SizeGroupModel;
 use App\Models\Size;
 
-class SizeGroup extends Component
+class SizeGroup extends Component implements CrudComponent
 {
     use WithPagination;
 
@@ -23,7 +27,7 @@ class SizeGroup extends Component
     public $sortUnassignedSizes = 'all'; // Default to show all sizes
     public $perPage = 10;
 
-    public function render()
+    public function render(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         if ($this->id && !SizeGroupModel::find($this->id)) {
             $this->id = '';
@@ -64,7 +68,7 @@ class SizeGroup extends Component
     }
 
 
-    public function create()
+    public function create(): void
     {
         $SizeGroup = new SizeGroupModel();
         foreach ($this->form as $key => $value) {
@@ -73,7 +77,7 @@ class SizeGroup extends Component
         $SizeGroup->save();
     }
 
-    public function update()
+    public function update(): void
     {
         $SizeGroup = SizeGroupModel::find($this->id);
         foreach ($this->form as $key => $value) {
@@ -98,7 +102,7 @@ class SizeGroup extends Component
         return redirect()->back();
     }
 
-    public function assignSize($sizeId)
+    public function assignSize($sizeId): void
     {
         $sizeGroup = SizeGroupModel::find($this->id);
         $size = Size::find($sizeId);
@@ -106,13 +110,13 @@ class SizeGroup extends Component
         $sizeGroup->sizes()->attach($size);
     }
 
-    public function removeSize($sizeId)
+    public function removeSize($sizeId): void
     {
         $sizeGroup = SizeGroupModel::find($this->id);
         $sizeGroup->sizes()->detach($sizeId);
     }
 
-    public function createAndAssignSize()
+    public function createAndAssignSize(): void
     {
         $size = new Size();
         $size->key = $this->form['size']['key'];
@@ -128,5 +132,10 @@ class SizeGroup extends Component
         $SizeGroup->forceDelete();
 
         return redirect()->back();
+    }
+
+    public function clearFilters()
+    {
+        $this->reset(['search', 'showDeleted']);
     }
 }

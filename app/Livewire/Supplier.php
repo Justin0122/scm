@@ -2,12 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Interfaces\CrudComponent;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Supplier as SupplierModel;
 
-class Supplier extends Component
+class Supplier extends Component implements CrudComponent
 {
     use WithPagination;
 

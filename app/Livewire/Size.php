@@ -2,12 +2,13 @@
 
 namespace App\Livewire;
 
+use App\Interfaces\CrudComponent;
 use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Size as SizeModel;
 
-class Size extends Component
+class Size extends Component implements CrudComponent
 {
     use WithPagination;
 
