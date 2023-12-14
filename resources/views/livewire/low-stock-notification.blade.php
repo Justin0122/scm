@@ -1,4 +1,5 @@
 <div wire:poll.keep-alive.5s>
+    @if ($lowStockProducts->isNotEmpty())
     <x-dropdown>
         <x-slot name="trigger">
             <button class="flex items-center text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-gray-500 dark:hover:text-gray-400 hover:border-gray-300 dark:hover:border-gray-600 focus:outline-none focus:text-gray-500 dark:focus:text-gray-400 focus:border-gray-300 dark:focus:border-gray-600 transition duration-150 ease-in-out">
@@ -58,5 +59,6 @@
             </div>
         </x-slot>
     </x-dropdown>
+    @endif
 
 </div>

@@ -89,18 +89,17 @@
                     </x-nav-link>
                 @endforeach
                 <x-link-border/>
-                <x-section-title :title="__('Audit Trail')" :description="__('View all database changes.')" :class="'mx-4'"/>
+                <x-section-title :title="__('Database Logs')" :description="__('Track all database modifications.')" :class="'mx-4'"/>
                 <x-nav-link href="{{ route('audit-trail') }}" :active="request()->routeIs('audit-trail')">
                     {{ __('Audit Trail') }}
                 </x-nav-link>
 
                 @can('seeTelescope')
-                    <x-link-border/>
-                    <x-section-title :title="__('Telescope')" :description="__('View all database changes.')" :class="'mx-4'"/>
                     <x-nav-link href="{{ route('telescope') }}" :active="request()->routeIs('telescope')">
                         {{ __('Telescope') }}
                     </x-nav-link>
                 @endcan
+
             </div>
 
         </div>

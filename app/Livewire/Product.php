@@ -73,23 +73,39 @@ class Product extends Component
     public function create()
     {
         $product = ProductModel::withTrashed()->find($this->productId);
-        $sizeIds = \App\Models\SizeGroup::find($this->form['size_group'])->sizes()->pluck('sizes.id')->toArray();
-        $colorIds = \App\Models\Color::find($this->form['color'])->pluck('id')->toArray();
-        $supplierIds = \App\Models\Supplier::find($this->form['supplier'])->pluck('id')->toArray();
 
-        foreach($supplierIds as $supplierId){
+        $sizeIds = isset($this->form['size_group']) ? \App\Models\SizeGroup::find($this->form['size_group'])->sizes()->pluck('sizes.id')->toArray() : [];
+        $colorIds = isset($this->form['color']) ? \App\Models\Color::find($this->form['color'])->pluck('id')->toArray() : [];
+        $supplierIds = isset($this->form['supplier']) ? \App\Models\Supplier::find($this->form['supplier'])->pluck('id')->toArray() : [];
+        $stock = isset($this->form['stock']) ? $this->form['stock'] : 0;
+
+        if (empty($sizeIds)) {
+            $sizeIds = [null];
+        }
+
+        if (empty($colorIds)) {
+            $colorIds = [null];
+        }
+
+        if (empty($supplierIds)) {
+            $supplierIds = [null];
+        }
+
+        foreach ($colorIds as $colorId) {
             foreach ($sizeIds as $sizeId) {
-                foreach ($colorIds as $colorId) {
+                foreach ($supplierIds as $supplierId) {
                     $product->productSpecifications()->create([
                         'color_id' => $colorId,
                         'size_id' => $sizeId,
-                        'stock' => 0,
+                        'stock' => $stock,
                         'supplier_id' => $supplierId,
                     ]);
                 }
             }
         }
     }
+
+
 
     public function delete($id)
     {
